@@ -216,7 +216,7 @@
       <img id="outFoto" alt="Foto generada" />
       <div class="actions">
         <button id="btnDownload" class="btn">Descargar</button>
-        <button id="btnPrint" class="btn">Imprimir</button> <!-- NUEVO -->
+        <button id="btnPrint" class="btn">Imprimir</button>
         <button id="btnFinish" class="btn primary">Finalizar</button>
       </div>
     </div>
@@ -254,7 +254,7 @@
   const outFoto = document.getElementById('outFoto');
   const btnFinish = document.getElementById('btnFinish');
   const btnDownload = document.getElementById('btnDownload');
-  const btnPrint = document.getElementById('btnPrint'); // NUEVO
+  const btnPrint = document.getElementById('btnPrint');
 
   let stream = null;
   let currentDataURL = "";
@@ -474,46 +474,58 @@
     a.remove();
   });
 
-  // Imprimir (NUEVO)
+  // Imprimir (cuadro nativo de Windows vía iframe)
   function printOutFoto(){
     if(!outFoto.src) return;
 
-    const w = window.open('', '_blank');
-    const html = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>Imprimir foto</title>
-  <style>
-    @page { size: auto; margin: 10mm; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #fff;
-    }
-    img { max-width: 100%; max-height: 100vh; }
-    @media print {
-      body { background: #fff; }
-    }
-  </style>
-</head>
-<body>
-  <img src="${outFoto.src}" alt="Foto FMF" />
-  <script>
-    window.onload = () => {
-      window.print();
-      setTimeout(() => window.close(), 300);
-    };
-  <\/script>
-</body>
-</html>`;
-    w.document.open();
-    w.document.write(html);
-    w.document.close();
+    const iframe = document.createElement('iframe');
+    iframe.style.position = 'fixed';
+    iframe.style.right = '0';
+    iframe.style.bottom = '0';
+    iframe.style.width = '0';
+    iframe.style.height = '0';
+    iframe.style.border = '0';
+    document.body.appendChild(iframe);
+
+    const doc = iframe.contentWindow.document;
+    doc.open();
+    doc.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8" />
+        <title>Imprimir foto</title>
+        <style>
+          @page { size: auto; margin: 10mm; }
+          html, body { height: 100%; }
+          body {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+          }
+          img { max-width: 100%; max-height: 100vh; }
+        </style>
+      </head>
+      <body>
+        <img src="${outFoto.src}" alt="Foto FMF" />
+        <script>
+          window.onload = function(){
+            window.focus();
+            window.print();
+            setTimeout(function(){ window.close && window.close(); }, 300);
+          };
+        <\/script>
+      </body>
+      </html>
+    `);
+    doc.close();
+
+    // Limpieza del iframe tras un rato
+    setTimeout(() => {
+      if (iframe && iframe.parentNode) iframe.parentNode.removeChild(iframe);
+    }, 1500);
   }
   btnPrint?.addEventListener('click', printOutFoto);
 
