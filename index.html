@@ -76,9 +76,13 @@
     .btn.primary:hover{background-color:#16a34a;}
     .btn.secondary{background:linear-gradient(180deg,#1f2937,#111827); width:60px; height:60px; padding:0; }
     .btn-icon{width:36px;height:36px}
+
     .btn-icon.camera{content:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Cpath d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/%3E%3Ccircle cx="12" cy="13" r="4"/%3E%3C/svg%3E')}
     .btn-icon.shutter{content:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="48" stroke="%23ffffff" stroke-width="4" fill="none"/%3E%3Ccircle cx="50" cy="50" r="30" fill="%23ffffff"/%3E%3C/svg%3E')}
     .btn-icon.upload{content:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Cpath d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/%3E%3Cpolyline points="17 8 12 3 7 8"/%3E%3Cline x1="12" y1="3" x2="12" y2="15"/%3E%3C/svg%3E')}
+
+    /* Ícono de impresora para el botón Imprimir */
+    .btn-icon.print{content:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Cpath d="M6 9V2h12v7"/%3E%3Cpath d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/%3E%3Cpath d="M6 14h12v8H6z"/%3E%3C/svg%3E')}
 
     .field{display:flex;flex-direction:column;gap:8px}
     label{font-size:13px;color:#fff; display:none; }
@@ -135,6 +139,8 @@
       background: rgba(0,0,0,.25);
       color:#fff;
       font-size:14px;
+      gap:8px;
+      padding:10px 14px;
     }
     .panel .btn.primary{
       background: rgba(34,197,94,.95);
@@ -215,8 +221,7 @@
       <h2>¡Listo! 🎉</h2>
       <img id="outFoto" alt="Foto generada" />
       <div class="actions">
-        <button id="btnDownload" class="btn">Descargar</button>
-        <button id="btnPrint" class="btn">Imprimir</button>
+        <button id="btnPrint" class="btn"><img class="btn-icon print" /> Imprimir</button>
         <button id="btnFinish" class="btn primary">Finalizar</button>
       </div>
     </div>
@@ -253,7 +258,6 @@
   const panelResult = document.getElementById('panel-result');
   const outFoto = document.getElementById('outFoto');
   const btnFinish = document.getElementById('btnFinish');
-  const btnDownload = document.getElementById('btnDownload');
   const btnPrint = document.getElementById('btnPrint');
 
   let stream = null;
@@ -455,23 +459,12 @@
       const fotoResult = await sendToN8N();
       showOverlayResult(fotoResult);
 
-      // Deja el botón Enviar normal para permitir otro envío después de cerrar overlay
       restoreBtn();
     }catch(err){
       setAlert('err', "No se pudo completar el proceso: " + err.message);
       restoreBtn();
       closeOverlay();
     }
-  });
-
-  // Descargar
-  btnDownload.addEventListener('click', ()=>{
-    const a = document.createElement('a');
-    a.href = outFoto.src;
-    a.download = 'foto_fmf.jpg';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
   });
 
   // Imprimir (cuadro nativo de Windows vía iframe)
@@ -522,7 +515,6 @@
     `);
     doc.close();
 
-    // Limpieza del iframe tras un rato
     setTimeout(() => {
       if (iframe && iframe.parentNode) iframe.parentNode.removeChild(iframe);
     }, 1500);
