@@ -55,7 +55,8 @@
     .preview img.show{display:block;width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain}
 
     .badge{position:absolute;left:16px;bottom:14px;font-size:12px;color:#fff;background:rgba(2,8,23,.6);border:1px solid rgba(255,255,255,.25);padding:6px 10px;border-radius:999px; display:none;}
-    .badge.show{display:none}
+    .badge.show{display:block} /* FIX */
+
     .remove-btn{position:absolute;right:12px;top:12px;display:none;color:white;background:var(--danger);width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;font-size:16px;font-weight:bold;align-items:center;justify-content:center}
     .remove-btn.show{display:flex}
 
@@ -81,7 +82,6 @@
     .btn-icon.shutter{content:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="48" stroke="%23ffffff" stroke-width="4" fill="none"/%3E%3Ccircle cx="50" cy="50" r="30" fill="%23ffffff"/%3E%3C/svg%3E')}
     .btn-icon.upload{content:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Cpath d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/%3E%3Cpolyline points="17 8 12 3 7 8"/%3E%3Cline x1="12" y1="3" x2="12" y2="15"/%3E%3C/svg%3E')}
 
-    /* Ícono de impresora para el botón Imprimir */
     .btn-icon.print{content:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Cpath d="M6 9V2h12v7"/%3E%3Cpath d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/%3E%3Cpath d="M6 14h12v8H6z"/%3E%3C/svg%3E')}
 
     .field{display:flex;flex-direction:column;gap:8px}
@@ -112,11 +112,9 @@
     .loader {width:24px;height:24px;border:3px solid #fff;border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}
     @keyframes rotation {0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 
-    /* Overlay de espera/resultado */
     .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);z-index:9999}
     .overlay.show{display:flex}
 
-    /* PANEL CON DEGRADADO */
     .panel{
       width:min(92vw,480px);
       background: linear-gradient(225deg, var(--brand), var(--brand-2));
@@ -133,7 +131,6 @@
     .big-loader{width:38px;height:38px;border:4px solid #fff;border-bottom-color:transparent;border-radius:50%;display:inline-block;animation:rotation 1s linear infinite}
     .actions{display:flex;gap:10px;justify-content:center;margin-top:10px}
 
-    /* Botones visibles sobre el degradado */
     .panel .btn{
       border:1px solid rgba(255,255,255,.22);
       background: rgba(0,0,0,.25);
@@ -162,7 +159,7 @@
         <canvas id="canvas"></canvas>
         <img id="imgPrev" alt="previsualización" />
         <div class="countdown" id="countOverlay"><div class="num" id="countNum">3</div></div>
-        <span class="badge" id="badgeText"></span>
+        <span class="badge" id="badgeText">Foto lista</span>
         <button type="button" class="remove-btn" id="btnRemove">X</button>
       </div>
 
@@ -210,7 +207,6 @@
     </div>
   </div>
 
-  <!-- Overlay de espera/resultado -->
   <div id="overlay" class="overlay">
     <div id="panel-wait" class="panel">
       <h2>Generando tu foto…</h2>
@@ -230,8 +226,8 @@
 <script>
   /* === URLs de backend === */
   const GAS_URL = "https://script.google.com/macros/s/AKfycbzok9RfWsAj8yU0pfrsszzUHrrRMlauyA84TH9A4DG_-fKdlTWTaZDgbVkZ4N9_Q3DO6g/exec";
-  // Este debe ser tu webhook de n8n que RESPONDE con { foto: "data:image/jpeg;base64,..." }
-  const N8N_WEBHOOK = 'https://pixelito.app.n8n.cloud/webhook/fmf-intake';
+  /* Proxy local que reenvía al webhook de n8n para evitar CORS */
+  const N8N_WEBHOOK = '/api/fmf-intake';
 
   /* ——— Referencias UI ——— */
   const video = document.getElementById('video');
@@ -239,7 +235,6 @@
   const imgPrev = document.getElementById('imgPrev');
   const btnCamera = document.getElementById('btnCamera');
   const btnShot = document.getElementById('btnShot');
-  const btnFileLbl = document.getElementById('btnFileLbl');
   const fileInput = document.getElementById('fileInput');
   const badgeText = document.getElementById('badgeText');
   const btnRemove = document.getElementById('btnRemove');
@@ -286,6 +281,8 @@
     emailEl.classList.toggle('invalid', !ok);
   });
   emailEl.addEventListener('input', () => { emailEl.classList.remove('invalid'); });
+  nameEl.addEventListener('input', () => { nameEl.classList.remove('invalid'); });
+  teamEl.addEventListener('change', () => { teamEl.classList.remove('invalid'); });
 
   async function startCamera(){
     try{
@@ -301,8 +298,10 @@
     }catch(err){ setAlert('err', "No se pudo acceder a la cámara: " + err.message); }
   }
   function stopCamera(){
-    if(stream){ stream.getTracks().forEach(t=>t.stop()); stream=null; }
-    video.pause(); video.removeAttribute('srcObject'); video.classList.remove('show');
+    if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+    video.pause();
+    video.srcObject = null; /* FIX */
+    video.classList.remove('show');
   }
   btnCamera.addEventListener('click', async () => { stream ? stopCamera() : await startCamera(); });
 
@@ -324,13 +323,18 @@
     canvas.width = w; canvas.height = h;
     const ctx = canvas.getContext('2d');
     ctx.drawImage(video, 0, 0, w, h);
-    currentDataURL = canvas.toDataURL('image/jpeg', 0.92);
+
+    /* Generar DataURL y Blob sin fetch(dataURL) */
+    canvas.toBlob(b => {
+      currentBlob = b;
+      currentDataURL = canvas.toDataURL('image/jpeg', 0.92);
+    }, 'image/jpeg', 0.92);
+
     canvas.classList.add('show');
     imgPrev.classList.remove('show');
     btnRemove.classList.add('show');
     badgeText.classList.add('show');
     stopCamera();
-    fetch(currentDataURL).then(r=>r.blob()).then(b=>currentBlob=b);
   }
 
   fileInput.addEventListener('change', async (e)=>{
@@ -391,7 +395,6 @@
     isSending = false;
   }
 
-  // Overlay helpers
   function openOverlayWait(){ panelResult.style.display='none'; panelWait.style.display='block'; overlay.classList.add('show'); }
   function showOverlayResult(fotoDataURL){
     outFoto.src = fotoDataURL;
@@ -410,7 +413,7 @@
     return new Blob([u8arr], { type: mime });
   }
 
-  // Enviar a n8n y ESPERAR la foto resultante
+  // Enviar a proxy local -> n8n y ESPERAR la foto resultante
   async function sendToN8N() {
     const fd = new FormData();
     fd.append('name',  nameEl.value.trim());
@@ -427,8 +430,8 @@
       fd.append('image_base64', currentDataURL || '');
     }
 
-    const res = await fetch(N8N_WEBHOOK, { method: 'POST', body: fd });
-    // Esperamos JSON: { foto: "data:image/jpeg;base64,..." }
+    const res = await fetch(N8N_WEBHOOK, { method: 'POST', body: fd, credentials: 'omit' });
+    if (!res.ok) throw new Error(`n8n HTTP ${res.status}`);
     const json = await res.json().catch(() => null);
     if (!json || !json.foto) throw new Error('Respuesta inválida de n8n');
     return json.foto;
@@ -449,10 +452,10 @@
       fd.append('team', teamEl.value.trim());
       fd.append('image_base64', currentDataURL);
 
-      const res = await fetch(GAS_URL, { method:'POST', body:fd, mode:'cors' });
+      const res = await fetch(GAS_URL, { method:'POST', body:fd, mode:'cors', credentials:'omit' });
       if(!res.ok){
         const t = await res.text().catch(()=> "");
-        throw new Error("HTTP "+res.status+" "+t);
+        throw new Error("GAS HTTP "+res.status+" "+t);
       }
       // 2) Pide a n8n la imagen resultante y muéstrala
       openOverlayWait();
@@ -467,10 +470,9 @@
     }
   });
 
-  // Imprimir (cuadro nativo de Windows vía iframe)
+  // Imprimir
   function printOutFoto(){
     if(!outFoto.src) return;
-
     const iframe = document.createElement('iframe');
     iframe.style.position = 'fixed';
     iframe.style.right = '0';
