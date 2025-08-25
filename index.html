@@ -6,95 +6,71 @@
   <title>Registro FMF</title>
   <style>
     :root{
-      --bg:#0b1220;
-      --card:#111827;
-      --muted:#94a3b8;
-      --text:#ffffff;
-      --brand:#d88147;
-      --brand-2:#b40056;
-      --danger:#ef4444;
-      --success:#22c55e;
-      --surface:#0b1220;
-      --outline:#1f2937;
-      --radius:28px;
+      --bg:#0b1220; --card:#111827; --muted:#94a3b8; --text:#ffffff;
+      --brand:#d88147; --brand-2:#b40056; --danger:#ef4444; --success:#22c55e;
+      --surface:#0b1220; --outline:#1f2937; --radius:28px;
     }
     *{box-sizing:border-box}
     body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;
-      background:linear-gradient(225deg, var(--brand), var(--brand-2));
-      color:var(--text);
-      display:flex;justify-content:center;align-items:center;
-      min-height:100vh;padding:20px
+      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;
+      background:linear-gradient(225deg,var(--brand),var(--brand-2));color:var(--text);
+      display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px
     }
     .wrap{max-width:480px;width:100%}
     .sr-only{position:absolute !important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
-    .form-header{display:flex;justify-content:center;align-items:center;min-height:74px;margin-top: clamp(10px, 6vh, 28px);padding-inline: 6px;}
-    .form-header img{max-height:75px;width:auto;object-fit:contain;}
+    .form-header{display:flex;justify-content:center;align-items:center;min-height:74px;margin-top:clamp(10px,6vh,28px);padding-inline:6px}
+    .form-header img{max-height:75px;width:auto;object-fit:contain}
 
-    .card{
-      position:relative;background:linear-gradient(225deg, var(--brand), var(--brand-2));
-      border-radius:var(--radius);padding:22px 22px 18px;border:none;backdrop-filter: blur(6px);overflow:hidden;
-    }
-
+    .card{position:relative;background:linear-gradient(225deg,var(--brand),var(--brand-2));border-radius:var(--radius);padding:22px 22px 18px;border:none;backdrop-filter:blur(6px);overflow:hidden}
     h1{
-      font-size:28px;margin:0 0 16px;font-weight:700;letter-spacing:.2px;text-align:center;color:#fff;
-      height: 50px;background-image: url("https://drive.google.com/uc?export=view&id=1VEYMSHkXT_skEzpzlPMwwGMnp87QArAe");
-      background-size: contain;background-repeat: no-repeat;background-position: center;text-indent: -9999px;
+      font-size:28px;margin:0 0 16px;font-weight:700;letter-spacing:.2px;text-align:center;color:#fff;height:50px;
+      background-image:url("https://drive.google.com/uc?export=view&id=1VEYMSHkXT_skEzpzlPMwwGMnp87QArAe");
+      background-size:contain;background-repeat:no-repeat;background-position:center;text-indent:-9999px;
     }
 
-    .preview{
-      position:relative;background:#0b1220;border:none;
-      box-shadow: 0 4px 12px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.02);
-      border-radius:18px; overflow:hidden;height:280px; display:flex; align-items:center; justify-content:center; margin-bottom:14px
-    }
-    .preview video,.preview canvas,.preview img{max-width:100%; max-height:100%; object-fit:contain; display:none;}
+    .preview{position:relative;background:#0b1220;border:none;box-shadow:0 4px 12px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.02);border-radius:18px;overflow:hidden;height:280px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+    .preview video,.preview canvas,.preview img{max-width:100%;max-height:100%;object-fit:contain;display:none}
     .preview video.show,.preview canvas.show{display:block;width:100%;height:100%;object-fit:cover}
     .preview img.show{display:block;width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain}
 
-    .badge{position:absolute;left:16px;bottom:14px;font-size:12px;color:#fff;background:rgba(2,8,23,.6);border:1px solid rgba(255,255,255,.25);padding:6px 10px;border-radius:999px; display:none;}
-    .remove-btn{position:absolute;right:12px;top:12px;display:none;color:white;background:var(--danger);width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;font-size:16px;font-weight:bold;align-items:center;justify-content:center}
+    .badge{position:absolute;left:16px;bottom:14px;font-size:12px;color:#fff;background:rgba(2,8,23,.6);border:1px solid rgba(255,255,255,.25);padding:6px 10px;border-radius:999px;display:none}
+    .remove-btn{position:absolute;right:12px;top:12px;display:none;color:#fff;background:var(--danger);width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;font-size:16px;font-weight:bold;align-items:center;justify-content:center}
 
     .countdown{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.35);backdrop-filter:blur(2px)}
     .countdown .num{font-size:96px;line-height:1;font-weight:800;color:#fff;text-shadow:0 8px 24px rgba(0,0,0,.45)}
 
     .controls{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:8px 0 6px}
     .btn{
-      appearance:none;border:1px solid rgba(255,255,255,.22);color:#fff;
-      background:linear-gradient(180deg,rgba(17,24,39,.8),rgba(17,24,39,.55));
+      appearance:none;border:1px solid rgba(255,255,255,.22);color:#fff;background:linear-gradient(180deg,rgba(17,24,39,.8),rgba(17,24,39,.55));
       padding:10px 16px;border-radius:12px;cursor:pointer;font-weight:600;letter-spacing:.2px;
       transition:transform .06s ease, background .2s ease, border-color .2s ease;display:flex;align-items:center;justify-content:center;gap:8px
     }
     .btn:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.36)}
     .btn:active{transform:translateY(0)}
     .btn.primary{background-color:var(--success);border-color:transparent;color:#fff}
-    .btn.primary:hover{background-color:#16a34a;}
+    .btn.primary:hover{background-color:#16a34a}
 
-    /* BOTONES CUADRADOS con ícono (arreglados con SVG inline) */
-    .btn.square{
-      width:92px;height:92px;border-radius:16px;flex-direction:column;
-      box-shadow:0 10px 24px rgba(0,0,0,.25)
-    }
+    /* Botones con icono */
+    .btn.square{width:92px;height:92px;border-radius:16px;flex-direction:column;box-shadow:0 10px 24px rgba(0,0,0,.25)}
     .btn.square svg{width:30px;height:30px;display:block}
     .btn.square span{font-size:14px;line-height:1.1;margin-top:6px}
 
     .field{display:flex;flex-direction:column;gap:8px}
     .input-like, input[type="text"], input[type="email"], #team{
-      width: 100%;height: 48px;padding: 12px 14px;border-radius: 14px;border: 1px solid rgba(255,255,255,.22);
-      background: rgba(0,0,0,.30);color: #fff;text-align: center;outline: none;box-shadow: none;transition: border-color .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;appearance: none;
+      width:100%;height:48px;padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.22);
+      background:rgba(0,0,0,.30);color:#fff;text-align:center;outline:none;box-shadow:none;transition:border-color .2s, box-shadow .2s, background .2s, color .2s;appearance:none
     }
-    input::placeholder{ color: rgba(255,255,255,.85); text-align: center; }
-    input[type="text"]:hover, input[type="email"]:hover,#team:hover{border-color: rgba(255,255,255,.32)}
-    input[type="text"]:focus, input[type="email"]:focus, #team:focus{border-color:#fff; box-shadow:0 0 0 3px rgba(255,255,255,.18)}
-    .invalid{border-color: rgba(255,255,255,0.95) !important; box-shadow:0 0 0 3px rgba(255,255,255,0.28) !important;}
+    input::placeholder{color:rgba(255,255,255,.85);text-align:center}
+    input[type="text"]:hover, input[type="email"]:hover, #team:hover{border-color:rgba(255,255,255,.32)}
+    input[type="text"]:focus, input[type="email"]:focus, #team:focus{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.18)}
+    .invalid{border-color:rgba(255,255,255,.95)!important;box-shadow:0 0 0 3px rgba(255,255,255,.28)!important}
 
     #team{
-      background-image: linear-gradient(45deg, transparent 50%, #bbb 50%),linear-gradient(135deg, #bbb 50%, transparent 50%);
-      background-position: calc(100% - 22px) 50%, calc(100% - 16px) 50%;
-      background-size: 6px 6px, 6px 6px; background-repeat:no-repeat;
+      background-image:linear-gradient(45deg, transparent 50%, #bbb 50%), linear-gradient(135deg, #bbb 50%, transparent 50%);
+      background-position:calc(100% - 22px) 50%, calc(100% - 16px) 50%;background-size:6px 6px,6px 6px;background-repeat:no-repeat
     }
-    #team option {background:#fff;color:#111}
+    #team option{background:#fff;color:#111}
 
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px}
     .submit-row{display:flex;justify-content:center;margin-top:8px}
@@ -102,26 +78,30 @@
     .alert.ok{display:block;border-color:var(--success);background-color:var(--success);color:#fff}
     .alert.err{display:block;border-color:rgba(255,255,255,.25);background:rgba(239,68,68,.09);color:#fecaca}
 
-    .loader {width:24px;height:24px;border:3px solid #fff;border-bottom-color:transparent;border-radius:50%;display:inline-block;animation:rotation 1s linear infinite}
-    @keyframes rotation {0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    .loader{width:24px;height:24px;border:3px solid #fff;border-bottom-color:transparent;border-radius:50%;display:inline-block;animation:rotation 1s linear infinite}
+    @keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 
-    /* Overlay mismo degradado */
+    /* Overlay */
     .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);z-index:9999}
     .overlay.show{display:flex}
-    .panel{width:min(92vw,520px);background:linear-gradient(225deg, var(--brand), var(--brand-2));border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:18px;text-align:center;box-shadow: 0 10px 30px rgba(0,0,0,.35)}
+    .panel{width:min(92vw,520px);background:linear-gradient(225deg,var(--brand),var(--brand-2));border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:18px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.35)}
     .panel h2{margin:6px 0 10px}
     .panel p{color:#e5e7eb;margin:8px 0}
     .panel img{max-width:100%;border-radius:14px;margin:10px 0}
     .big-loader{width:38px;height:38px;border:4px solid #fff;border-bottom-color:transparent;border-radius:50%;display:inline-block;animation:rotation 1s linear infinite}
     .actions{display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+
+    @media (max-width:760px){ .grid{grid-template-columns:1fr} .preview{height:320px} }
+    @media (orientation:landscape) and (max-height:600px){
+      body{min-height:auto;padding:10px;align-items:flex-start} .wrap{max-width:90%}
+      .grid{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))} .preview{height:200px}
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
-      <div class="form-header">
-        <img src="./img/LOGO_FMF.png" alt="Registro FMF" />
-      </div>
+      <div class="form-header"><img src="./img/LOGO_FMF.png" alt="Registro FMF" /></div>
       <h1>Registro FMF</h1>
 
       <div class="preview" id="previewBox">
@@ -133,9 +113,8 @@
         <button type="button" class="remove-btn" id="btnRemove">X</button>
       </div>
 
-      <!-- BOTONES con SVG inline (arreglado) -->
+      <!-- Botones con SVG inline -->
       <div class="controls">
-        <!-- Cámara -->
         <button class="btn square" id="btnCamera" title="Activar/Detener cámara" aria-label="Cámara">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
@@ -144,7 +123,6 @@
           <span>Cámara</span>
         </button>
 
-        <!-- Disparo -->
         <button class="btn square" id="btnShot" title="Tomar foto" aria-label="Disparo">
           <svg viewBox="0 0 100 100" aria-hidden="true">
             <circle cx="50" cy="50" r="48" stroke="currentColor" stroke-width="4" fill="none"/>
@@ -153,7 +131,6 @@
           <span>Disparo</span>
         </button>
 
-        <!-- Subir -->
         <label class="btn square" id="btnFileLbl" for="fileInput" title="Subir imagen">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -172,32 +149,17 @@
         <div class="field">
           <select id="team">
             <option value="">Equipo Favorito</option>
-            <option value="América">América</option>
-            <option value="Tigres">Tigres</option>
-            <option value="Toluca">Toluca</option>
-            <option value="Pachuca">Pachuca</option>
-            <option value="Pumas">Pumas</option>
-            <option value="Monterrey">Monterrey</option>
-            <option value="Juárez">Juárez</option>
-            <option value="Chivas">Chivas</option>
-            <option value="León">León</option>
-            <option value="Cruz Azul">Cruz Azul</option>
-            <option value="San Luis">San Luis</option>
-            <option value="Atlas">Atlas</option>
-            <option value="Santos">Santos</option>
-            <option value="Necaxa">Necaxa</option>
-            <option value="Xolos">Xolos</option>
-            <option value="Querétaro">Querétaro</option>
-            <option value="Puebla">Puebla</option>
-            <option value="Mazatlán">Mazatlán</option>
+            <option value="América">América</option><option value="Tigres">Tigres</option><option value="Toluca">Toluca</option>
+            <option value="Pachuca">Pachuca</option><option value="Pumas">Pumas</option><option value="Monterrey">Monterrey</option>
+            <option value="Juárez">Juárez</option><option value="Chivas">Chivas</option><option value="León">León</option>
+            <option value="Cruz Azul">Cruz Azul</option><option value="San Luis">San Luis</option><option value="Atlas">Atlas</option>
+            <option value="Santos">Santos</option><option value="Necaxa">Necaxa</option><option value="Xolos">Xolos</option>
+            <option value="Querétaro">Querétaro</option><option value="Puebla">Puebla</option><option value="Mazatlán">Mazatlán</option>
           </select>
         </div>
       </div>
 
-      <div class="submit-row">
-        <button class="btn primary" id="btnSend">Enviar</button>
-      </div>
-
+      <div class="submit-row"><button class="btn primary" id="btnSend">Enviar</button></div>
       <div id="msg" class="alert"></div>
     </div>
   </div>
@@ -230,12 +192,11 @@
   </div>
 
 <script>
-  /* === URLs de backend === */
+  /* URLs backend */
   const GAS_URL = "https://script.google.com/macros/s/AKfycbzok9RfWsAj8yU0pfrsszzUHrrRMlauyA84TH9A4DG_-fKdlTWTaZDgbVkZ4N9_Q3DO6g/exec";
-  // Debe responder con JSON: { foto: "data:image/jpeg;base64,..." }
   const N8N_WEBHOOK = 'http://localhost:5678/webhook/fmf-intake';
 
-  /* ——— Referencias UI ——— */
+  /* Refs UI */
   const video = document.getElementById('video');
   const canvas = document.getElementById('canvas');
   const imgPrev = document.getElementById('imgPrev');
@@ -251,8 +212,6 @@
   const phoneEl = document.getElementById('phone');
   const teamEl = document.getElementById('team');
   const btnSend = document.getElementById('btnSend');
-
-  // Overlay
   const overlay = document.getElementById('overlay');
   const panelWait = document.getElementById('panel-wait');
   const panelResult = document.getElementById('panel-result');
@@ -261,20 +220,14 @@
   const btnDownload = document.getElementById('btnDownload');
   const btnPrint = document.getElementById('btnPrint');
 
-  let stream = null;
-  let currentDataURL = "";
-  let currentBlob = null;
-  let isSending = false;
+  let stream = null, currentDataURL = "", currentBlob = null, isSending = false;
 
-  function setAlert(type, text){
-    msg.className = "alert " + (type === 'err' ? 'err' : 'ok');
-    msg.textContent = text;
-  }
-  function clearAlert(){ msg.className = "alert"; msg.textContent=""; }
+  const setAlert = (type,text)=>{ msg.className = "alert " + (type==='err'?'err':'ok'); msg.textContent = text; }
+  const clearAlert = ()=>{ msg.className = "alert"; msg.textContent=""; }
 
   /* Validación */
   phoneEl.addEventListener('input', () => {
-    const digits = phoneEl.value.replace(/\D+/g, '').slice(0,10);
+    const digits = phoneEl.value.replace(/\D+/g,'').slice(0,10);
     phoneEl.value = digits;
     phoneEl.classList.toggle('invalid', digits.length>0 && digits.length<10);
   });
@@ -282,63 +235,61 @@
   emailEl.addEventListener('blur', () => emailEl.classList.toggle('invalid', !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)));
   emailEl.addEventListener('input', () => emailEl.classList.remove('invalid'));
 
-  async function startCamera() {
+  async function startCamera(){
     const isSecure = location.protocol === 'https:' || location.hostname === 'localhost';
-    if (!isSecure) { setAlert('err', 'Para usar la cámara, abre el sitio con HTTPS (o en localhost).'); return; }
-    try {
+    if(!isSecure){ setAlert('err','Para usar la cámara, abre el sitio con HTTPS (o en localhost).'); return; }
+    try{
       video.setAttribute('playsinline',''); video.setAttribute('autoplay',''); video.setAttribute('muted',''); video.muted = true;
       stream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:{ideal:'user'} }, audio:false });
       video.srcObject = stream; try{ await video.play(); }catch(_){}
       video.classList.add('show'); imgPrev.classList.remove('show'); canvas.classList.remove('show'); btnRemove.style.display='none';
       clearAlert();
-    } catch (err) {
-      const n = err?.name || 'Error';
+    }catch(err){
       const map = {
-        NotAllowedError: 'Permiso de cámara denegado. Habilítalo en el navegador.',
-        NotFoundError: 'No se encontró una cámara disponible.',
-        OverconstrainedError: 'No se encontró una cámara disponible.',
-        NotReadableError: 'Otra app está usando la cámara. Ciérrala e inténtalo de nuevo.',
+        NotAllowedError:'Permiso de cámara denegado. Habilítalo en el navegador.',
+        NotFoundError:'No se encontró una cámara disponible.',
+        OverconstrainedError:'No se encontró una cámara disponible.',
+        NotReadableError:'Otra app está usando la cámara. Ciérrala e inténtalo de nuevo.',
       };
-      setAlert('err', map[n] || ('No se pudo acceder a la cámara: ' + err.message));
+      setAlert('err', map[err?.name] || ('No se pudo acceder a la cámara: '+err.message));
     }
   }
   function stopCamera(){ if(stream){ stream.getTracks().forEach(t=>t.stop()); } stream=null; video.pause(); video.srcObject=null; video.classList.remove('show'); }
-
   btnCamera.addEventListener('click', async ()=>{ stream ? stopCamera() : await startCamera(); });
 
-  btnShot.addEventListener('click', async () => {
-    if(!stream){ setAlert('err',"Primero activa la cámara."); return; }
+  btnShot.addEventListener('click', () => {
+    if(!stream){ setAlert('err','Primero activa la cámara.'); return; }
     countOverlay.style.display='flex';
-    let count = 3; countNum.textContent = count;
-    const id = setInterval(()=>{ count--; if(count<=0){ clearInterval(id); countOverlay.style.display='none'; captureFrame(); } else{ countNum.textContent = count; } }, 1000);
+    let c=3; countNum.textContent=c;
+    const id=setInterval(()=>{ c--; if(c<=0){ clearInterval(id); countOverlay.style.display='none'; captureFrame(); } else countNum.textContent=c; },1000);
   });
 
   function captureFrame(){
     const w = video.videoWidth, h = video.videoHeight;
-    if(!w || !h){ setAlert('err',"No hay imagen de la cámara."); return; }
-    canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(video, 0, 0, w, h);
-    currentDataURL = canvas.toDataURL('image/jpeg', 0.92);
+    if(!w || !h){ setAlert('err','No hay imagen de la cámara.'); return; }
+    canvas.width=w; canvas.height=h; canvas.getContext('2d').drawImage(video,0,0,w,h);
+    currentDataURL = canvas.toDataURL('image/jpeg',0.92);
     canvas.classList.add('show'); imgPrev.classList.remove('show'); btnRemove.style.display='flex';
     stopCamera();
     fetch(currentDataURL).then(r=>r.blob()).then(b=>currentBlob=b);
   }
 
   fileInput.addEventListener('change', (e)=>{
-    const f = e.target.files?.[0]; if(!f) return;
-    const url = URL.createObjectURL(f); imgPrev.src = url; imgPrev.onload = ()=>URL.revokeObjectURL(url);
+    const f=e.target.files?.[0]; if(!f) return;
+    const url=URL.createObjectURL(f); imgPrev.src=url; imgPrev.onload=()=>URL.revokeObjectURL(url);
     imgPrev.classList.add('show'); canvas.classList.remove('show'); video.classList.remove('show'); btnRemove.style.display='flex'; clearAlert();
-    const fr = new FileReader(); fr.onload = () => { currentDataURL = fr.result; currentBlob = f; }; fr.readAsDataURL(f); stopCamera();
+    const fr=new FileReader(); fr.onload=()=>{ currentDataURL=fr.result; currentBlob=f; }; fr.readAsDataURL(f); stopCamera();
   });
 
   btnRemove.addEventListener('click', ()=>{ imgPrev.removeAttribute('src'); imgPrev.classList.remove('show'); canvas.classList.remove('show'); btnRemove.style.display='none'; currentDataURL=""; currentBlob=null; });
 
   function validate(){
-    let ok = true;
+    let ok=true;
     if(!nameEl.value.trim()){ nameEl.classList.add('invalid'); ok=false; } else nameEl.classList.remove('invalid');
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())){ emailEl.classList.add('invalid'); ok=false; } else emailEl.classList.remove('invalid');
     if(!/^\d{10}$/.test(phoneEl.value.trim())){ phoneEl.classList.add('invalid'); ok=false; } else phoneEl.classList.remove('invalid');
     if(!teamEl.value.trim()){ teamEl.classList.add('invalid'); ok=false; } else teamEl.classList.remove('invalid');
-    if(!currentDataURL){ ok=false; setAlert('err',"Por favor, toma una foto o sube una imagen."); }
+    if(!currentDataURL){ ok=false; setAlert('err','Por favor, toma una foto o sube una imagen.'); }
     return ok;
   }
 
@@ -350,36 +301,35 @@
   function closeOverlay(){ overlay.classList.remove('show'); }
 
   function dataURLtoBlob(dataURL){
-    const [h,b] = dataURL.split(','), mime = (h.match(/:(.*?);/)||[])[1] || 'image/jpeg';
-    const bin = atob(b||''); const u8 = new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u8[i]=bin.charCodeAt(i);
-    return new Blob([u8], { type:mime });
+    const [h,b]=dataURL.split(','), mime=(h.match(/:(.*?);/)||[])[1]||'image/jpeg';
+    const bin=atob(b||''); const u8=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u8[i]=bin.charCodeAt(i);
+    return new Blob([u8],{type:mime});
   }
 
   async function sendToN8N(){
-    const fd = new FormData();
+    const fd=new FormData();
     fd.append('name',nameEl.value.trim()); fd.append('email',emailEl.value.trim()); fd.append('phone',phoneEl.value.trim()); fd.append('team',teamEl.value.trim());
-    let fileBlob = currentBlob || (currentDataURL ? dataURLtoBlob(currentDataURL) : null);
+    let fileBlob=currentBlob || (currentDataURL ? dataURLtoBlob(currentDataURL) : null);
     if(fileBlob){ const ext=(fileBlob.type?.split('/')[1])||'jpg'; fd.append('image',fileBlob,`captura.${ext}`); } else { fd.append('image_base64',currentDataURL||''); }
-    const res = await fetch(N8N_WEBHOOK,{method:'POST',body:fd}); const json = await res.json().catch(()=>null);
-    if(!json || !json.foto) throw new Error('Respuesta inválida de n8n');
-    return json.foto;
+    const res=await fetch(N8N_WEBHOOK,{method:'POST',body:fd}); const json=await res.json().catch(()=>null);
+    if(!json || !json.foto) throw new Error('Respuesta inválida de n8n'); return json.foto;
   }
 
   btnSend.addEventListener('click', async ()=>{
     clearAlert(); if(isSending || !validate()) return; showLoading();
     try{
-      const fd = new FormData();
+      const fd=new FormData();
       fd.append('name',nameEl.value.trim()); fd.append('email',emailEl.value.trim()); fd.append('phone',phoneEl.value.trim()); fd.append('team',teamEl.value.trim()); fd.append('image_base64',currentDataURL);
-      const res = await fetch(GAS_URL,{method:'POST',body:fd,mode:'cors'}); if(!res.ok){ throw new Error("HTTP "+res.status+" "+(await res.text().catch(()=>''))); }
-      openOverlayWait(); const fotoResult = await sendToN8N(); showOverlayResult(fotoResult); restoreBtn();
+      const res=await fetch(GAS_URL,{method:'POST',body:fd,mode:'cors'}); if(!res.ok) throw new Error("HTTP "+res.status+" "+(await res.text().catch(()=>'')));
+      openOverlayWait(); const fotoResult=await sendToN8N(); showOverlayResult(fotoResult); restoreBtn();
     }catch(err){ setAlert('err',"No se pudo completar el proceso: "+err.message); restoreBtn(); closeOverlay(); }
   });
 
-  document.getElementById('btnDownload').addEventListener('click', ()=>{
+  btnDownload.addEventListener('click', ()=>{
     const a=document.createElement('a'); a.href=outFoto.src; a.download='foto_fmf.jpg'; document.body.appendChild(a); a.click(); a.remove();
   });
-  document.getElementById('btnPrint').addEventListener('click', ()=>{
-    const w = window.open('', '_blank', 'width=800,height=600'); if(!w) return;
+  btnPrint.addEventListener('click', ()=>{
+    const w=window.open('','_blank','width=800,height=600'); if(!w) return;
     w.document.write(`<html><head><title>Imprimir</title><style>body{margin:0;display:flex;align-items:center;justify-content:center;background:#fff}img{max-width:100%;max-height:100vh}@media print{body{margin:0}}</style></head><body><img src="${outFoto.src}" onload="window.print(); setTimeout(()=>window.close(), 300);" /></body></html>`); w.document.close();
   });
 
