@@ -37,7 +37,6 @@
       position:relative;background:linear-gradient(225deg, var(--brand), var(--brand-2));
       border-radius:var(--radius);padding:22px 22px 18px;border:none;backdrop-filter: blur(6px);overflow:hidden;
     }
-    .card::before{display:none !important;}
 
     h1{
       font-size:28px;margin:0 0 16px;font-weight:700;letter-spacing:.2px;text-align:center;color:#fff;
@@ -46,7 +45,7 @@
     }
 
     .preview{
-      position:relative;background:var(--surface);border:none;
+      position:relative;background:#0b1220;border:none;
       box-shadow: 0 4px 12px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.02);
       border-radius:18px; overflow:hidden;height:280px; display:flex; align-items:center; justify-content:center; margin-bottom:14px
     }
@@ -55,15 +54,12 @@
     .preview img.show{display:block;width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain}
 
     .badge{position:absolute;left:16px;bottom:14px;font-size:12px;color:#fff;background:rgba(2,8,23,.6);border:1px solid rgba(255,255,255,.25);padding:6px 10px;border-radius:999px; display:none;}
-    .badge.show{display:none}
     .remove-btn{position:absolute;right:12px;top:12px;display:none;color:white;background:var(--danger);width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;font-size:16px;font-weight:bold;align-items:center;justify-content:center}
-    .remove-btn.show{display:flex}
 
     .countdown{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.35);backdrop-filter:blur(2px)}
-    .countdown.show{display:flex}
     .countdown .num{font-size:96px;line-height:1;font-weight:800;color:#fff;text-shadow:0 8px 24px rgba(0,0,0,.45)}
 
-    .controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:8px 0 6px}
+    .controls{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:8px 0 6px}
     .btn{
       appearance:none;border:1px solid rgba(255,255,255,.22);color:#fff;
       background:linear-gradient(180deg,rgba(17,24,39,.8),rgba(17,24,39,.55));
@@ -74,12 +70,16 @@
     .btn:active{transform:translateY(0)}
     .btn.primary{background-color:var(--success);border-color:transparent;color:#fff}
     .btn.primary:hover{background-color:#16a34a;}
-    .btn.secondary{background:linear-gradient(180deg,#1f2937,#111827); width:60px; height:60px; padding:0; }
-    .btn-icon{width:36px;height:36px}
-    .btn svg{width:18px;height:18px}
+
+    /* BOTONES CUADRADOS con ícono (arreglados con SVG inline) */
+    .btn.square{
+      width:92px;height:92px;border-radius:16px;flex-direction:column;
+      box-shadow:0 10px 24px rgba(0,0,0,.25)
+    }
+    .btn.square svg{width:30px;height:30px;display:block}
+    .btn.square span{font-size:14px;line-height:1.1;margin-top:6px}
 
     .field{display:flex;flex-direction:column;gap:8px}
-    label{font-size:13px;color:#fff; display:none; }
     .input-like, input[type="text"], input[type="email"], #team{
       width: 100%;height: 48px;padding: 12px 14px;border-radius: 14px;border: 1px solid rgba(255,255,255,.22);
       background: rgba(0,0,0,.30);color: #fff;text-align: center;outline: none;box-shadow: none;transition: border-color .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;appearance: none;
@@ -87,7 +87,6 @@
     input::placeholder{ color: rgba(255,255,255,.85); text-align: center; }
     input[type="text"]:hover, input[type="email"]:hover,#team:hover{border-color: rgba(255,255,255,.32)}
     input[type="text"]:focus, input[type="email"]:focus, #team:focus{border-color:#fff; box-shadow:0 0 0 3px rgba(255,255,255,.18)}
-    input[type="text"]:not(:placeholder-shown), input[type="email"]:not(:placeholder-shown){background: rgba(0,0,0,.30); color:#fff; border-color: rgba(255,255,255,.22)}
     .invalid{border-color: rgba(255,255,255,0.95) !important; box-shadow:0 0 0 3px rgba(255,255,255,0.28) !important;}
 
     #team{
@@ -96,29 +95,20 @@
       background-size: 6px 6px, 6px 6px; background-repeat:no-repeat;
     }
     #team option {background:#fff;color:#111}
-    #team:valid {background: rgba(0,0,0,.30); color:#fff; border:1px solid rgba(255,255,255,.22)}
+
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px}
     .submit-row{display:flex;justify-content:center;margin-top:8px}
     .alert{margin-top:14px;padding:12px 14px;border-radius:12px;border:1px solid;display:none;text-align:center}
     .alert.ok{display:block;border-color:var(--success);background-color:var(--success);color:#fff}
     .alert.err{display:block;border-color:rgba(255,255,255,.25);background:rgba(239,68,68,.09);color:#fecaca}
 
-    .loader {width:24px;height:24px;border:3px solid #fff;border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}
+    .loader {width:24px;height:24px;border:3px solid #fff;border-bottom-color:transparent;border-radius:50%;display:inline-block;animation:rotation 1s linear infinite}
     @keyframes rotation {0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 
-    /* Overlay de espera/resultado (mismo degradado que la tarjeta) */
-    .overlay{
-      position:fixed;inset:0;display:none;align-items:center;justify-content:center;
-      background:rgba(0,0,0,.55);backdrop-filter:blur(3px);z-index:9999
-    }
+    /* Overlay mismo degradado */
+    .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);z-index:9999}
     .overlay.show{display:flex}
-    .panel{
-      width:min(92vw,520px);
-      background:linear-gradient(225deg, var(--brand), var(--brand-2));
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:22px;padding:18px;text-align:center;
-      box-shadow: 0 10px 30px rgba(0,0,0,.35)
-    }
+    .panel{width:min(92vw,520px);background:linear-gradient(225deg, var(--brand), var(--brand-2));border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:18px;text-align:center;box-shadow: 0 10px 30px rgba(0,0,0,.35)}
     .panel h2{margin:6px 0 10px}
     .panel p{color:#e5e7eb;margin:8px 0}
     .panel img{max-width:100%;border-radius:14px;margin:10px 0}
@@ -143,15 +133,34 @@
         <button type="button" class="remove-btn" id="btnRemove">X</button>
       </div>
 
+      <!-- BOTONES con SVG inline (arreglado) -->
       <div class="controls">
-        <button class="btn secondary" id="btnCamera" title="Activar/Detener cámara">
-          <img class="btn-icon camera" alt="Cámara" />
+        <!-- Cámara -->
+        <button class="btn square" id="btnCamera" title="Activar/Detener cámara" aria-label="Cámara">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+          <span>Cámara</span>
         </button>
-        <button class="btn secondary" id="btnShot" title="Tomar foto">
-          <img class="btn-icon shutter" alt="Disparo" />
+
+        <!-- Disparo -->
+        <button class="btn square" id="btnShot" title="Tomar foto" aria-label="Disparo">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="48" stroke="currentColor" stroke-width="4" fill="none"/>
+            <circle cx="50" cy="50" r="30" fill="currentColor"/>
+          </svg>
+          <span>Disparo</span>
         </button>
-        <label class="btn secondary" for="fileInput" id="btnFileLbl" title="Subir imagen">
-          <img class="btn-icon upload" alt="Subir" />
+
+        <!-- Subir -->
+        <label class="btn square" id="btnFileLbl" for="fileInput" title="Subir imagen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <span>Subir</span>
         </label>
         <input id="fileInput" type="file" accept="image/*" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
       </div>
@@ -193,7 +202,7 @@
     </div>
   </div>
 
-  <!-- Overlay de espera/resultado -->
+  <!-- Overlay espera/resultado -->
   <div id="overlay" class="overlay">
     <div id="panel-wait" class="panel">
       <h2>Generando tu foto…</h2>
@@ -205,28 +214,15 @@
       <img id="outFoto" alt="Foto generada" />
       <div class="actions">
         <button id="btnDownload" class="btn" title="Descargar">
-          <!-- Icono descargar -->
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Descargar
         </button>
         <button id="btnPrint" class="btn" title="Imprimir">
-          <!-- Icono impresora -->
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 6 2 18 2 18 9"/>
-            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-            <rect x="6" y="14" width="12" height="8"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
           Imprimir
         </button>
         <button id="btnFinish" class="btn primary" title="Finalizar">
-          <!-- Icono check -->
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           Finalizar
         </button>
       </div>
@@ -245,9 +241,7 @@
   const imgPrev = document.getElementById('imgPrev');
   const btnCamera = document.getElementById('btnCamera');
   const btnShot = document.getElementById('btnShot');
-  const btnFileLbl = document.getElementById('btnFileLbl');
   const fileInput = document.getElementById('fileInput');
-  const badgeText = document.getElementById('badgeText');
   const btnRemove = document.getElementById('btnRemove');
   const msg = document.getElementById('msg');
   const countOverlay = document.getElementById('countOverlay');
@@ -278,283 +272,119 @@
   }
   function clearAlert(){ msg.className = "alert"; msg.textContent=""; }
 
-  /* Validación teléfono y correo */
+  /* Validación */
   phoneEl.addEventListener('input', () => {
     const digits = phoneEl.value.replace(/\D+/g, '').slice(0,10);
     phoneEl.value = digits;
     phoneEl.classList.toggle('invalid', digits.length>0 && digits.length<10);
   });
-  phoneEl.addEventListener('blur', () => {
-    const ok = /^\d{10}$/.test(phoneEl.value);
-    phoneEl.classList.toggle('invalid', !ok);
-  });
-  emailEl.addEventListener('blur', () => {
-    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value);
-    emailEl.classList.toggle('invalid', !ok);
-  });
-  emailEl.addEventListener('input', () => { emailEl.classList.remove('invalid'); });
+  phoneEl.addEventListener('blur', () => phoneEl.classList.toggle('invalid', !/^\d{10}$/.test(phoneEl.value)));
+  emailEl.addEventListener('blur', () => emailEl.classList.toggle('invalid', !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)));
+  emailEl.addEventListener('input', () => emailEl.classList.remove('invalid'));
 
-  // ----- Cámara: start/stop robustos -----
   async function startCamera() {
     const isSecure = location.protocol === 'https:' || location.hostname === 'localhost';
-    if (!isSecure) {
-      setAlert('err', 'Para usar la cámara, abre el sitio con HTTPS (o en localhost).');
-      return;
-    }
+    if (!isSecure) { setAlert('err', 'Para usar la cámara, abre el sitio con HTTPS (o en localhost).'); return; }
     try {
-      const constraints = {
-        video: { facingMode: { ideal: 'user' } },
-        audio: false
-      };
-
-      // iOS: asegurar flags
-      video.setAttribute('playsinline', '');
-      video.setAttribute('autoplay', '');
-      video.setAttribute('muted', '');
-      video.muted = true;
-
-      stream = await navigator.mediaDevices.getUserMedia(constraints);
-      video.srcObject = stream;
-      try { await video.play(); } catch (_) {}
-
-      video.classList.add('show');
-      imgPrev.classList.remove('show');
-      canvas.classList.remove('show');
-      btnRemove.classList.remove('show');
-      badgeText.classList.remove('show');
+      video.setAttribute('playsinline',''); video.setAttribute('autoplay',''); video.setAttribute('muted',''); video.muted = true;
+      stream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:{ideal:'user'} }, audio:false });
+      video.srcObject = stream; try{ await video.play(); }catch(_){}
+      video.classList.add('show'); imgPrev.classList.remove('show'); canvas.classList.remove('show'); btnRemove.style.display='none';
       clearAlert();
     } catch (err) {
-      let m = err && err.name ? err.name : 'Error';
-      if (m === 'NotAllowedError') {
-        setAlert('err', 'Permiso de cámara denegado. Habilítalo en el navegador.');
-      } else if (m === 'NotFoundError' || m === 'OverconstrainedError') {
-        setAlert('err', 'No se encontró una cámara disponible.');
-      } else if (m === 'NotReadableError') {
-        setAlert('err', 'Otra app está usando la cámara. Ciérrala e inténtalo de nuevo.');
-      } else {
-        setAlert('err', 'No se pudo acceder a la cámara: ' + err.message);
-      }
+      const n = err?.name || 'Error';
+      const map = {
+        NotAllowedError: 'Permiso de cámara denegado. Habilítalo en el navegador.',
+        NotFoundError: 'No se encontró una cámara disponible.',
+        OverconstrainedError: 'No se encontró una cámara disponible.',
+        NotReadableError: 'Otra app está usando la cámara. Ciérrala e inténtalo de nuevo.',
+      };
+      setAlert('err', map[n] || ('No se pudo acceder a la cámara: ' + err.message));
     }
   }
+  function stopCamera(){ if(stream){ stream.getTracks().forEach(t=>t.stop()); } stream=null; video.pause(); video.srcObject=null; video.classList.remove('show'); }
 
-  function stopCamera() {
-    if (stream) {
-      stream.getTracks().forEach(t => t.stop());
-    }
-    stream = null;
-    video.pause();
-    video.srcObject = null;
-    video.classList.remove('show');
-  }
-
-  btnCamera.addEventListener('click', async () => {
-    if (stream) stopCamera();
-    else await startCamera();
-  });
+  btnCamera.addEventListener('click', async ()=>{ stream ? stopCamera() : await startCamera(); });
 
   btnShot.addEventListener('click', async () => {
     if(!stream){ setAlert('err',"Primero activa la cámara."); return; }
-    countOverlay.classList.add('show');
+    countOverlay.style.display='flex';
     let count = 3; countNum.textContent = count;
-    const id = setInterval(()=>{
-      count--;
-      if(count<=0){ clearInterval(id); countOverlay.classList.remove('show'); captureFrame(); }
-      else{ countNum.textContent = count; }
-    }, 1000);
+    const id = setInterval(()=>{ count--; if(count<=0){ clearInterval(id); countOverlay.style.display='none'; captureFrame(); } else{ countNum.textContent = count; } }, 1000);
   });
 
   function captureFrame(){
-    const w = video.videoWidth;
-    const h = video.videoHeight;
+    const w = video.videoWidth, h = video.videoHeight;
     if(!w || !h){ setAlert('err',"No hay imagen de la cámara."); return; }
-    canvas.width = w; canvas.height = h;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0, w, h);
+    canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(video, 0, 0, w, h);
     currentDataURL = canvas.toDataURL('image/jpeg', 0.92);
-    canvas.classList.add('show');
-    imgPrev.classList.remove('show');
-    btnRemove.classList.add('show');
-    badgeText.classList.add('show');
+    canvas.classList.add('show'); imgPrev.classList.remove('show'); btnRemove.style.display='flex';
     stopCamera();
     fetch(currentDataURL).then(r=>r.blob()).then(b=>currentBlob=b);
   }
 
-  fileInput.addEventListener('change', async (e)=>{
-    const f = e.target.files && e.target.files[0];
-    if(!f) return;
-    try{
-      const url = URL.createObjectURL(f);
-      imgPrev.src = url;
-      imgPrev.onload = ()=> URL.revokeObjectURL(url);
-      imgPrev.classList.add('show');
-      canvas.classList.remove('show');
-      video.classList.remove('show');
-      btnRemove.classList.add('show');
-      badgeText.classList.add('show');
-      clearAlert();
-      const fr = new FileReader();
-      fr.onload = () => { currentDataURL = fr.result; currentBlob = f; };
-      fr.readAsDataURL(f);
-      stopCamera();
-    }catch(err){ setAlert('err',"No se pudo leer el archivo: "+err.message); }
+  fileInput.addEventListener('change', (e)=>{
+    const f = e.target.files?.[0]; if(!f) return;
+    const url = URL.createObjectURL(f); imgPrev.src = url; imgPrev.onload = ()=>URL.revokeObjectURL(url);
+    imgPrev.classList.add('show'); canvas.classList.remove('show'); video.classList.remove('show'); btnRemove.style.display='flex'; clearAlert();
+    const fr = new FileReader(); fr.onload = () => { currentDataURL = fr.result; currentBlob = f; }; fr.readAsDataURL(f); stopCamera();
   });
 
-  btnRemove.addEventListener('click', ()=>{
-    imgPrev.removeAttribute('src');
-    imgPrev.classList.remove('show');
-    canvas.classList.remove('show');
-    btnRemove.classList.remove('show');
-    badgeText.classList.remove('show');
-    currentDataURL = "";
-    currentBlob = null;
-  });
+  btnRemove.addEventListener('click', ()=>{ imgPrev.removeAttribute('src'); imgPrev.classList.remove('show'); canvas.classList.remove('show'); btnRemove.style.display='none'; currentDataURL=""; currentBlob=null; });
 
   function validate(){
     let ok = true;
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim());
-    const phoneOk = /^\d{10}$/.test(phoneEl.value.trim());
-    if(!nameEl.value.trim()){ nameEl.classList.add('invalid'); ok=false; } else { nameEl.classList.remove('invalid'); }
-    if(!emailEl.value.trim() || !emailOk){ emailEl.classList.add('invalid'); ok=false; } else { emailEl.classList.remove('invalid'); }
-    if(!phoneEl.value.trim() || !phoneOk){ phoneEl.classList.add('invalid'); ok=false; } else { phoneEl.classList.remove('invalid'); }
-    if(!teamEl.value.trim()){ teamEl.classList.add('invalid'); ok=false; } else { teamEl.classList.remove('invalid'); }
-    if(!currentDataURL){ ok=false; setAlert('err', "Por favor, toma una foto o sube una imagen."); }
-    if(!ok){
-      if(!currentDataURL) setAlert('err', "Por favor, toma una foto o sube una imagen.");
-      else if(!nameEl.value.trim() || !emailEl.value.trim() || !phoneEl.value.trim()) setAlert('err', "Revisa los campos requeridos.");
-      else if(!teamEl.value.trim()) setAlert('err', "Elige a tu Equipo Favorito");
-    }
+    if(!nameEl.value.trim()){ nameEl.classList.add('invalid'); ok=false; } else nameEl.classList.remove('invalid');
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())){ emailEl.classList.add('invalid'); ok=false; } else emailEl.classList.remove('invalid');
+    if(!/^\d{10}$/.test(phoneEl.value.trim())){ phoneEl.classList.add('invalid'); ok=false; } else phoneEl.classList.remove('invalid');
+    if(!teamEl.value.trim()){ teamEl.classList.add('invalid'); ok=false; } else teamEl.classList.remove('invalid');
+    if(!currentDataURL){ ok=false; setAlert('err',"Por favor, toma una foto o sube una imagen."); }
     return ok;
   }
 
-  function showLoading(){
-    btnSend.innerHTML = '<span class="loader"></span>';
-    btnSend.disabled = true;
-    isSending = true;
-  }
-  function restoreBtn(){
-    btnSend.innerHTML = 'Enviar';
-    btnSend.disabled = false;
-    isSending = false;
-  }
+  function showLoading(){ btnSend.innerHTML='<span class="loader"></span>'; btnSend.disabled=true; isSending=true; }
+  function restoreBtn(){ btnSend.innerHTML='Enviar'; btnSend.disabled=false; isSending=false; }
 
-  // Overlay helpers
   function openOverlayWait(){ panelResult.style.display='none'; panelWait.style.display='block'; overlay.classList.add('show'); }
-  function showOverlayResult(fotoDataURL){
-    outFoto.src = fotoDataURL;
-    panelWait.style.display='none';
-    panelResult.style.display='block';
-  }
+  function showOverlayResult(foto){ outFoto.src=foto; panelWait.style.display='none'; panelResult.style.display='block'; }
   function closeOverlay(){ overlay.classList.remove('show'); }
 
-  function dataURLtoBlob(dataURL) {
-    const arr = dataURL.split(',');
-    const mime = (arr[0].match(/:(.*?);/)||[])[1] || 'image/jpeg';
-    const bstr = atob(arr[1] || '');
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) u8arr[n] = bstr.charCodeAt(n);
-    return new Blob([u8arr], { type: mime });
+  function dataURLtoBlob(dataURL){
+    const [h,b] = dataURL.split(','), mime = (h.match(/:(.*?);/)||[])[1] || 'image/jpeg';
+    const bin = atob(b||''); const u8 = new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u8[i]=bin.charCodeAt(i);
+    return new Blob([u8], { type:mime });
   }
 
-  // Enviar a n8n y ESPERAR la foto resultante
-  async function sendToN8N() {
+  async function sendToN8N(){
     const fd = new FormData();
-    fd.append('name',  nameEl.value.trim());
-    fd.append('email', emailEl.value.trim());
-    fd.append('phone', phoneEl.value.trim());
-    fd.append('team',  teamEl.value.trim());
-
-    let fileBlob = currentBlob;
-    if (!fileBlob && currentDataURL) fileBlob = dataURLtoBlob(currentDataURL);
-    if (fileBlob) {
-      const ext = (fileBlob.type && fileBlob.type.split('/')[1]) || 'jpg';
-      fd.append('image', fileBlob, `captura.${ext}`);
-    } else {
-      fd.append('image_base64', currentDataURL || '');
-    }
-
-    const res = await fetch(N8N_WEBHOOK, { method: 'POST', body: fd });
-    const json = await res.json().catch(() => null);
-    if (!json || !json.foto) throw new Error('Respuesta inválida de n8n');
+    fd.append('name',nameEl.value.trim()); fd.append('email',emailEl.value.trim()); fd.append('phone',phoneEl.value.trim()); fd.append('team',teamEl.value.trim());
+    let fileBlob = currentBlob || (currentDataURL ? dataURLtoBlob(currentDataURL) : null);
+    if(fileBlob){ const ext=(fileBlob.type?.split('/')[1])||'jpg'; fd.append('image',fileBlob,`captura.${ext}`); } else { fd.append('image_base64',currentDataURL||''); }
+    const res = await fetch(N8N_WEBHOOK,{method:'POST',body:fd}); const json = await res.json().catch(()=>null);
+    if(!json || !json.foto) throw new Error('Respuesta inválida de n8n');
     return json.foto;
   }
 
-  /* ===== Envío ===== */
   btnSend.addEventListener('click', async ()=>{
-    clearAlert();
-    if(isSending || !validate()) return;
-    showLoading();
-
+    clearAlert(); if(isSending || !validate()) return; showLoading();
     try{
-      // 1) Guarda en GAS
       const fd = new FormData();
-      fd.append('name', nameEl.value.trim());
-      fd.append('email', emailEl.value.trim());
-      fd.append('phone', phoneEl.value.trim());
-      fd.append('team', teamEl.value.trim());
-      fd.append('image_base64', currentDataURL);
-
-      const res = await fetch(GAS_URL, { method:'POST', body:fd, mode:'cors' });
-      if(!res.ok){
-        const t = await res.text().catch(()=> "");
-        throw new Error("HTTP "+res.status+" "+t);
-      }
-
-      // 2) Pide a n8n la imagen resultante y muéstrala
-      openOverlayWait();
-      const fotoResult = await sendToN8N();
-      showOverlayResult(fotoResult);
-
-      restoreBtn();
-    }catch(err){
-      setAlert('err', "No se pudo completar el proceso: " + err.message);
-      restoreBtn();
-      closeOverlay();
-    }
+      fd.append('name',nameEl.value.trim()); fd.append('email',emailEl.value.trim()); fd.append('phone',phoneEl.value.trim()); fd.append('team',teamEl.value.trim()); fd.append('image_base64',currentDataURL);
+      const res = await fetch(GAS_URL,{method:'POST',body:fd,mode:'cors'}); if(!res.ok){ throw new Error("HTTP "+res.status+" "+(await res.text().catch(()=>''))); }
+      openOverlayWait(); const fotoResult = await sendToN8N(); showOverlayResult(fotoResult); restoreBtn();
+    }catch(err){ setAlert('err',"No se pudo completar el proceso: "+err.message); restoreBtn(); closeOverlay(); }
   });
 
-  // Descargar
-  btnDownload.addEventListener('click', ()=>{
-    const a = document.createElement('a');
-    a.href = outFoto.src;
-    a.download = 'foto_fmf.jpg';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+  document.getElementById('btnDownload').addEventListener('click', ()=>{
+    const a=document.createElement('a'); a.href=outFoto.src; a.download='foto_fmf.jpg'; document.body.appendChild(a); a.click(); a.remove();
+  });
+  document.getElementById('btnPrint').addEventListener('click', ()=>{
+    const w = window.open('', '_blank', 'width=800,height=600'); if(!w) return;
+    w.document.write(`<html><head><title>Imprimir</title><style>body{margin:0;display:flex;align-items:center;justify-content:center;background:#fff}img{max-width:100%;max-height:100vh}@media print{body{margin:0}}</style></head><body><img src="${outFoto.src}" onload="window.print(); setTimeout(()=>window.close(), 300);" /></body></html>`); w.document.close();
   });
 
-  // Imprimir (abre una ventana con solo la imagen)
-  btnPrint.addEventListener('click', ()=>{
-    const w = window.open('', '_blank', 'width=800,height=600');
-    if (!w) return;
-    w.document.write(`
-      <html>
-        <head><title>Imprimir</title>
-          <style>
-            body{margin:0;display:flex;align-items:center;justify-content:center;background:#fff}
-            img{max-width:100%;max-height:100vh}
-            @media print { body { margin:0 } }
-          </style>
-        </head>
-        <body>
-          <img src="${outFoto.src}" alt="Foto" onload="window.print(); setTimeout(()=>window.close(), 300);" />
-        </body>
-      </html>
-    `);
-    w.document.close();
-  });
-
-  // Finalizar
-  function resetForm(){
-    nameEl.value = ""; emailEl.value = ""; phoneEl.value = ""; teamEl.value = "";
-    nameEl.classList.remove('invalid'); emailEl.classList.remove('invalid');
-    phoneEl.classList.remove('invalid'); teamEl.classList.remove('invalid');
-    btnRemove.click(); clearAlert();
-  }
-  btnFinish.addEventListener('click', ()=>{
-    resetForm();
-    closeOverlay();
-  });
+  function resetForm(){ nameEl.value=""; emailEl.value=""; phoneEl.value=""; teamEl.value=""; nameEl.classList.remove('invalid'); emailEl.classList.remove('invalid'); phoneEl.classList.remove('invalid'); teamEl.classList.remove('invalid'); btnRemove.click(); clearAlert(); }
+  btnFinish.addEventListener('click', ()=>{ resetForm(); closeOverlay(); });
 </script>
 </body>
 </html>
