@@ -75,12 +75,8 @@
     .btn.primary{background-color:var(--success);border-color:transparent;color:#fff}
     .btn.primary:hover{background-color:#16a34a;}
     .btn.secondary{background:linear-gradient(180deg,#1f2937,#111827); width:60px; height:60px; padding:0; }
-    .btn-icon{width:18px;height:18px;display:inline-block}
-    .btn-icon.camera{content:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Cpath d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/%3E%3Ccircle cx="12" cy="13" r="4"/%3E%3C/svg%3E')}
-    .btn-icon.shutter{content:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="48" stroke="%23ffffff" stroke-width="4" fill="none"/%3E%3Ccircle cx="50" cy="50" r="30" fill="%23ffffff"/%3E%3C/svg%3E')}
-    .btn-icon.upload{content:url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3E%3Cpath d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/%3E%3Cpolyline points="17 8 12 3 7 8"/%3E%3Cline x1="12" y1="3" x2="12" y2="15"/%3E%3C/svg%3E')}
-    .btn-icon.check{content:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%23ffffff%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M20 6L9 17l-5-5%22/%3E%3C/svg%3E')}
-    .btn-icon.print{content:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%23ffffff%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M6 9V2h12v7%22/%3E%3Cpath d=%22M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2%22/%3E%3Cpath d=%22M6 14h12v8H6z%22/%3E%3C/svg%3E')}
+    .btn-icon{width:36px;height:36px}
+    .btn svg{width:18px;height:18px}
 
     .field{display:flex;flex-direction:column;gap:8px}
     label{font-size:13px;color:#fff; display:none; }
@@ -110,20 +106,24 @@
     .loader {width:24px;height:24px;border:3px solid #fff;border-bottom-color:transparent;border-radius:50%;display:inline-block;box-sizing:border-box;animation:rotation 1s linear infinite}
     @keyframes rotation {0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 
-    /* Overlay de espera/resultado */
-    .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);z-index:9999}
+    /* Overlay de espera/resultado (mismo degradado que la tarjeta) */
+    .overlay{
+      position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+      background:rgba(0,0,0,.55);backdrop-filter:blur(3px);z-index:9999
+    }
     .overlay.show{display:flex}
     .panel{
-      width:min(92vw,480px);
-      background:linear-gradient(225deg, var(--brand), var(--brand-2)); /* mismo degradado */
-      border:1px solid rgba(255,255,255,.18);
-      border-radius:20px;padding:18px;text-align:center;color:#fff;
-      box-shadow:0 20px 50px rgba(0,0,0,.35);
+      width:min(92vw,520px);
+      background:linear-gradient(225deg, var(--brand), var(--brand-2));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:22px;padding:18px;text-align:center;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35)
     }
     .panel h2{margin:6px 0 10px}
-    .panel img{max-width:100%;border-radius:14px;margin:10px 0;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+    .panel p{color:#e5e7eb;margin:8px 0}
+    .panel img{max-width:100%;border-radius:14px;margin:10px 0}
     .big-loader{width:38px;height:38px;border:4px solid #fff;border-bottom-color:transparent;border-radius:50%;display:inline-block;animation:rotation 1s linear infinite}
-    .actions{display:flex;gap:10px;justify-content:center;margin-top:10px}
+    .actions{display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap}
   </style>
 </head>
 <body>
@@ -135,7 +135,7 @@
       <h1>Registro FMF</h1>
 
       <div class="preview" id="previewBox">
-        <video id="video" playsinline></video>
+        <video id="video" autoplay muted playsinline></video>
         <canvas id="canvas"></canvas>
         <img id="imgPrev" alt="previsualización" />
         <div class="countdown" id="countOverlay"><div class="num" id="countNum">3</div></div>
@@ -144,9 +144,15 @@
       </div>
 
       <div class="controls">
-        <button class="btn secondary" id="btnCamera"><img class="btn-icon camera" /></button>
-        <button class="btn secondary" id="btnShot"><img class="btn-icon shutter" /></button>
-        <label class="btn secondary" for="fileInput" id="btnFileLbl"><img class="btn-icon upload" /></label>
+        <button class="btn secondary" id="btnCamera" title="Activar/Detener cámara">
+          <img class="btn-icon camera" alt="Cámara" />
+        </button>
+        <button class="btn secondary" id="btnShot" title="Tomar foto">
+          <img class="btn-icon shutter" alt="Disparo" />
+        </button>
+        <label class="btn secondary" for="fileInput" id="btnFileLbl" title="Subir imagen">
+          <img class="btn-icon upload" alt="Subir" />
+        </label>
         <input id="fileInput" type="file" accept="image/*" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
       </div>
 
@@ -187,20 +193,42 @@
     </div>
   </div>
 
-  <!-- Overlay de espera/resultado con mismo degradado -->
+  <!-- Overlay de espera/resultado -->
   <div id="overlay" class="overlay">
     <div id="panel-wait" class="panel">
       <h2>Generando tu foto…</h2>
       <span class="big-loader"></span>
-      <p style="color:#fff;margin:10px 0 0;opacity:.9">Esto puede tardar unos segundos.</p>
+      <p>Esto puede tardar unos segundos.</p>
     </div>
-
     <div id="panel-result" class="panel" style="display:none;">
       <h2>¡Listo! 🎉</h2>
       <img id="outFoto" alt="Foto generada" />
       <div class="actions">
-        <button id="btnFinish" class="btn primary"><span class="btn-icon check"></span>Finalizar</button>
-        <button id="btnPrint" class="btn"><span class="btn-icon print"></span>Imprimir</button>
+        <button id="btnDownload" class="btn" title="Descargar">
+          <!-- Icono descargar -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Descargar
+        </button>
+        <button id="btnPrint" class="btn" title="Imprimir">
+          <!-- Icono impresora -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 6 2 18 2 18 9"/>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+            <rect x="6" y="14" width="12" height="8"/>
+          </svg>
+          Imprimir
+        </button>
+        <button id="btnFinish" class="btn primary" title="Finalizar">
+          <!-- Icono check -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Finalizar
+        </button>
       </div>
     </div>
   </div>
@@ -208,7 +236,7 @@
 <script>
   /* === URLs de backend === */
   const GAS_URL = "https://script.google.com/macros/s/AKfycbzok9RfWsAj8yU0pfrsszzUHrrRMlauyA84TH9A4DG_-fKdlTWTaZDgbVkZ4N9_Q3DO6g/exec";
-  // Este debe ser tu webhook de n8n que RESPONDE con { foto: "data:image/jpeg;base64,..." }
+  // Debe responder con JSON: { foto: "data:image/jpeg;base64,..." }
   const N8N_WEBHOOK = 'http://localhost:5678/webhook/fmf-intake';
 
   /* ——— Referencias UI ——— */
@@ -236,6 +264,7 @@
   const panelResult = document.getElementById('panel-result');
   const outFoto = document.getElementById('outFoto');
   const btnFinish = document.getElementById('btnFinish');
+  const btnDownload = document.getElementById('btnDownload');
   const btnPrint = document.getElementById('btnPrint');
 
   let stream = null;
@@ -265,24 +294,63 @@
   });
   emailEl.addEventListener('input', () => { emailEl.classList.remove('invalid'); });
 
-  async function startCamera(){
-    try{
-      stream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode: 'user' }, audio:false });
+  // ----- Cámara: start/stop robustos -----
+  async function startCamera() {
+    const isSecure = location.protocol === 'https:' || location.hostname === 'localhost';
+    if (!isSecure) {
+      setAlert('err', 'Para usar la cámara, abre el sitio con HTTPS (o en localhost).');
+      return;
+    }
+    try {
+      const constraints = {
+        video: { facingMode: { ideal: 'user' } },
+        audio: false
+      };
+
+      // iOS: asegurar flags
+      video.setAttribute('playsinline', '');
+      video.setAttribute('autoplay', '');
+      video.setAttribute('muted', '');
+      video.muted = true;
+
+      stream = await navigator.mediaDevices.getUserMedia(constraints);
       video.srcObject = stream;
-      await video.play();
+      try { await video.play(); } catch (_) {}
+
       video.classList.add('show');
       imgPrev.classList.remove('show');
       canvas.classList.remove('show');
       btnRemove.classList.remove('show');
       badgeText.classList.remove('show');
       clearAlert();
-    }catch(err){ setAlert('err', "No se pudo acceder a la cámara: " + err.message); }
+    } catch (err) {
+      let m = err && err.name ? err.name : 'Error';
+      if (m === 'NotAllowedError') {
+        setAlert('err', 'Permiso de cámara denegado. Habilítalo en el navegador.');
+      } else if (m === 'NotFoundError' || m === 'OverconstrainedError') {
+        setAlert('err', 'No se encontró una cámara disponible.');
+      } else if (m === 'NotReadableError') {
+        setAlert('err', 'Otra app está usando la cámara. Ciérrala e inténtalo de nuevo.');
+      } else {
+        setAlert('err', 'No se pudo acceder a la cámara: ' + err.message);
+      }
+    }
   }
-  function stopCamera(){
-    if(stream){ stream.getTracks().forEach(t=>t.stop()); stream=null; }
-    video.pause(); video.removeAttribute('srcObject'); video.classList.remove('show');
+
+  function stopCamera() {
+    if (stream) {
+      stream.getTracks().forEach(t => t.stop());
+    }
+    stream = null;
+    video.pause();
+    video.srcObject = null;
+    video.classList.remove('show');
   }
-  btnCamera.addEventListener('click', async () => { stream ? stopCamera() : await startCamera(); });
+
+  btnCamera.addEventListener('click', async () => {
+    if (stream) stopCamera();
+    else await startCamera();
+  });
 
   btnShot.addEventListener('click', async () => {
     if(!stream){ setAlert('err',"Primero activa la cámara."); return; }
@@ -336,7 +404,7 @@
     imgPrev.classList.remove('show');
     canvas.classList.remove('show');
     btnRemove.classList.remove('show');
-    badgeText.classList.remove('show());
+    badgeText.classList.remove('show');
     currentDataURL = "";
     currentBlob = null;
   });
@@ -431,6 +499,7 @@
         const t = await res.text().catch(()=> "");
         throw new Error("HTTP "+res.status+" "+t);
       }
+
       // 2) Pide a n8n la imagen resultante y muéstrala
       openOverlayWait();
       const fotoResult = await sendToN8N();
@@ -444,7 +513,38 @@
     }
   });
 
-  // Finalizar (limpia y cierra)
+  // Descargar
+  btnDownload.addEventListener('click', ()=>{
+    const a = document.createElement('a');
+    a.href = outFoto.src;
+    a.download = 'foto_fmf.jpg';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  });
+
+  // Imprimir (abre una ventana con solo la imagen)
+  btnPrint.addEventListener('click', ()=>{
+    const w = window.open('', '_blank', 'width=800,height=600');
+    if (!w) return;
+    w.document.write(`
+      <html>
+        <head><title>Imprimir</title>
+          <style>
+            body{margin:0;display:flex;align-items:center;justify-content:center;background:#fff}
+            img{max-width:100%;max-height:100vh}
+            @media print { body { margin:0 } }
+          </style>
+        </head>
+        <body>
+          <img src="${outFoto.src}" alt="Foto" onload="window.print(); setTimeout(()=>window.close(), 300);" />
+        </body>
+      </html>
+    `);
+    w.document.close();
+  });
+
+  // Finalizar
   function resetForm(){
     nameEl.value = ""; emailEl.value = ""; phoneEl.value = ""; teamEl.value = "";
     nameEl.classList.remove('invalid'); emailEl.classList.remove('invalid');
@@ -455,34 +555,6 @@
     resetForm();
     closeOverlay();
   });
-
-  // Imprimir
-  function printImage(src){
-    const w = window.open('', '_blank');
-    if(!w) return;
-    w.document.write(`
-      <html><head><title>Imprimir</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <style>
-          html,body{margin:0;padding:0;height:100%}
-          body{display:flex;align-items:center;justify-content:center;background:#fff}
-          img{max-width:100%;max-height:100vh}
-          @page { size: auto; margin: 10mm; }
-        </style>
-      </head>
-      <body>
-        <img src="${src}" />
-        <script>
-          window.onload = function(){
-            window.focus(); window.print();
-            setTimeout(()=>window.close(), 300);
-          }
-        <\/script>
-      </body></html>
-    `);
-    w.document.close();
-  }
-  btnPrint.addEventListener('click', ()=> printImage(outFoto.src));
 </script>
 </body>
 </html>
