@@ -61,8 +61,7 @@
     }
     .btn.square svg{width:30px;height:30px;display:block}
     .btn.square span{font-size:14px;line-height:1.1;margin-top:6px;white-space:normal;text-align:center}
-    /* Oculta texto de los 3 botones de control */
-    .controls .btn.square span{ display:none !important; }
+    .controls .btn.square span{ display:none !important; } /* oculta textos de cámara/disparo/subir */
 
     .field{display:flex;flex-direction:column;gap:8px}
     .input-like, input[type="text"], input[type="email"], #team{
@@ -332,11 +331,44 @@
     }catch(err){ setAlert('err',"No se pudo completar el proceso: "+err.message); restoreBtn(); closeOverlay(); }
   });
 
-  // Imprime directo (abre una ventana con la imagen y dispara window.print)
+  // Imprimir directo SIN abrir nueva ventana (iframe oculto)
   btnPrint.addEventListener('click', ()=>{
-    const w=window.open('','_blank','width=800,height=600'); if(!w) return;
-    w.document.write(`<html><head><title>Imprimir</title><style>html,body{height:100%;margin:0}body{display:flex;align-items:center;justify-content:center;background:#fff}img{max-width:100%;max-height:100vh}</style></head><body><img src="${outFoto.src}" onload="window.print(); setTimeout(()=>window.close(), 300);" /></body></html>`);
-    w.document.close();
+    const iframe = document.createElement('iframe');
+    iframe.style.position='fixed';
+    iframe.style.right='0';
+    iframe.style.bottom='0';
+    iframe.style.width='0';
+    iframe.style.height='0';
+    iframe.style.border='0';
+    document.body.appendChild(iframe);
+
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    doc.open();
+    doc.write(`
+      <html>
+        <head>
+          <title>Imprimir</title>
+          <style>
+            @page { size: auto; margin: 0 }
+            html, body { height:100%; margin:0 }
+            body { display:flex; align-items:center; justify-content:center; background:#fff }
+            img { max-width:100%; max-height:100vh; }
+          </style>
+        </head>
+        <body>
+          <img id="toPrint" src="${outFoto.src}">
+        </body>
+      </html>
+    `);
+    doc.close();
+
+    const img = doc.getElementById('toPrint');
+    img.onload = () => {
+      const w = iframe.contentWindow || iframe;
+      w.focus();
+      w.print();
+      setTimeout(()=> document.body.removeChild(iframe), 500);
+    };
   });
 
   function resetForm(){ nameEl.value=""; emailEl.value=""; phoneEl.value=""; teamEl.value=""; nameEl.classList.remove('invalid'); emailEl.classList.remove('invalid'); phoneEl.classList.remove('invalid'); teamEl.classList.remove('invalid'); btnRemove.click(); clearAlert(); }
