@@ -127,29 +127,26 @@
 
       <!-- Botones con SVG inline -->
       <div class="controls">
-        <button class="btn square" id="btnCamera" title="Activar/Detener cámara">
+        <button class="btn square" id="btnCamera" title="Activar/Detener cámara" aria-label="Cámara">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
             <circle cx="12" cy="13" r="4"/>
           </svg>
-          <span>Cámara</span>
         </button>
 
-        <button class="btn square" id="btnShot" title="Tomar foto">
+        <button class="btn square" id="btnShot" title="Tomar foto" aria-label="Disparo">
           <svg viewBox="0 0 100 100" aria-hidden="true">
             <circle cx="50" cy="50" r="48" stroke="currentColor" stroke-width="4" fill="none"/>
             <circle cx="50" cy="50" r="30" fill="currentColor"/>
           </svg>
-          <span>Disparo</span>
         </button>
 
-        <label class="btn square" id="btnFileLbl" for="fileInput">
+        <label class="btn square" id="btnFileLbl" for="fileInput" title="Subir imagen">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
             <polyline points="17 8 12 3 7 8"/>
             <line x1="12" y1="3" x2="12" y2="15"/>
           </svg>
-          <span>Subir</span>
         </label>
         <input id="fileInput" type="file" accept="image/*" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
       </div>
