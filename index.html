@@ -159,7 +159,7 @@
   </div>
 
 <script>
-  const GAS_URL  = "https://script.google.com/macros/s/AKfycbwCzUEVAR7wqbaK-LJVXTgxOvxTsnmJhAaVi2JMLEU1s0PdqKHraDTE_cdglUyCK1mFdQ/exec";
+  /* Solo n8n */
   const N8N_WEBHOOK = "http://localhost:5678/webhook/fmf-intake";
 
   const video=document.getElementById('video');
@@ -230,17 +230,15 @@
     overlay.classList.add('show'); panelWait.style.display='block'; panelResult.style.display='none';
 
     try{
-      // 1) n8n
       const fd=new FormData();
       if(currentBlob){ const ext=(currentBlob.type?.split('/')[1])||'jpg'; fd.append('image',currentBlob,`captura.${ext}`);}
       else{ fd.append('image_base64',currentDataURL); }
+
       const res=await fetch(N8N_WEBHOOK,{method:'POST',body:fd});
       const json=await res.json();
       if(!json || !json.foto) throw new Error('Respuesta inválida de n8n');
-      outFoto.src=json.foto;
 
-      // 2) Guardar en Drive/Sheets
-      await uploadToGAS(json.foto);
+      outFoto.src=json.foto;
 
       panelWait.style.display='none'; panelResult.style.display='flex';
     }catch(err){
@@ -248,19 +246,6 @@
       overlay.classList.remove('show');
     }
   };
-
-  async function uploadToGAS(dataURL){
-    try{
-      const fd=new FormData();
-      fd.append('image_base64', dataURL);
-      const res = await fetch(GAS_URL, { method:'POST', body:fd, mode:'cors' });
-      const text = await res.text();
-      let j = null; try{ j = JSON.parse(text); }catch(_){}
-      if(!res.ok) throw new Error(`HTTP ${res.status} – ${text||'sin cuerpo'}`);
-      if(!j){ j = { ok:true, raw:text }; }
-      return j;
-    }catch(e){ console.warn('Fallo al subir a GAS:', e); return null; }
-  }
 
   btnPrint.onclick=()=>{ 
     const iframe=document.createElement('iframe');
