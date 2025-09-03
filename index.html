@@ -18,26 +18,21 @@
       background:linear-gradient(225deg,var(--brand),var(--brand-2));
       color:var(--text);
       min-height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      text-align:center;
-      padding:20px;
+      display:flex; justify-content:center; align-items:center;
+      text-align:center; padding:20px;
     }
     .wrap{width:min(520px,92vw); display:flex; flex-direction:column; align-items:center;}
     .card{
       background:linear-gradient(225deg,var(--brand),var(--brand-2));
       border-radius:var(--radius);
       padding:20px;
-      backdrop-filter:blur(6px);
       width:100%;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
+      display:flex; flex-direction:column; align-items:center;
+      backdrop-filter:blur(6px);
     }
     .form-header{display:flex; justify-content:center; align-items:center; min-height:64px; margin-bottom:10px;}
     .form-header img{max-height:72px; width:auto; object-fit:contain}
-    h1{margin:10px 0 20px; font-size:22px; text-align:center}
+    h1{margin:10px 0 20px; font-size:22px}
     .preview{
       position:relative;
       background:#0b1220;
@@ -46,51 +41,41 @@
       aspect-ratio: 9 / 16;
       max-height:78vh;
       margin-bottom:16px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
+      display:flex; align-items:center; justify-content:center;
       box-shadow:0 4px 12px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.02);
       width:100%;
     }
-    .preview video,.preview canvas,.preview img{
-      display:none; width:100%; height:100%; object-fit:cover;
-    }
+    .preview video,.preview canvas,.preview img{display:none; width:100%; height:100%; object-fit:cover}
     .preview video.show,.preview canvas.show,.preview img.show{display:block}
     .remove-btn{
-      position:absolute; right:10px; top:10px; display:none;
+      position:absolute; right:10px; top:10px;
       color:#fff; background:var(--danger);
       width:34px; height:34px; border:none; border-radius:999px; cursor:pointer; font-weight:700;
+      display:none; align-items:center; justify-content:center;
     }
+    .remove-btn.show{display:flex}
 
     /* Contador */
     .countdown{
-      position:absolute;
-      inset:0;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      background:rgba(0,0,0,.45);
-      backdrop-filter:blur(3px);
+      position:absolute; inset:0; display:none;
+      align-items:center; justify-content:center;
+      background:rgba(0,0,0,.45); backdrop-filter:blur(3px);
     }
     .countdown.show{display:flex}
-    .countdown .num{
-      font-size:96px; font-weight:800; color:#fff;
-      text-shadow:0 6px 20px rgba(0,0,0,.6);
-    }
+    .countdown .num{font-size:96px; font-weight:800; color:#fff; text-shadow:0 6px 20px rgba(0,0,0,.6)}
 
-    .controls{
-      display:flex; gap:12px; justify-content:center; margin:12px 0 4px;
-      flex-wrap:wrap;
-    }
+    .controls{display:flex; gap:12px; justify-content:center; margin:12px 0 8px; flex-wrap:wrap}
     .btn{
       appearance:none; border:1px solid rgba(255,255,255,.22); color:#fff;
       background:linear-gradient(180deg,rgba(17,24,39,.8),rgba(17,24,39,.55));
       border-radius:16px; cursor:pointer; display:flex; align-items:center; justify-content:center;
       transition:transform .06s ease, border-color .2s ease;
-      width:96px; height:96px; box-shadow:0 10px 24px rgba(0,0,0,.25)
+      box-shadow:0 10px 24px rgba(0,0,0,.25)
     }
     .btn:hover{transform:translateY(-1px); border-color:rgba(255,255,255,.36)}
-    .btn svg{width:30px; height:30px}
+    .btn.square{width:96px; height:96px}
+    .btn.square svg{width:30px; height:30px}
+    .btn.primary{background:var(--success); border-color:transparent; padding:12px 22px; border-radius:12px; font-weight:700}
 
     .alert{
       margin-top:10px; padding:10px 12px;
@@ -111,12 +96,15 @@
       box-shadow:0 10px 30px rgba(0,0,0,.35);
       display:flex; flex-direction:column; align-items:center;
     }
-    .panel img{max-width:100%; border-radius:14px; margin:10px 0}
+    .panel img.photo{max-width:100%; border-radius:14px; margin:10px 0}
+    .qr-wrap{display:flex; align-items:center; gap:10px; margin-top:6px}
+    .qr-wrap img{width:72px; height:72px; border-radius:8px; background:#fff}
+    .drive-link{color:#fff; text-decoration:underline; word-break:break-all; max-width:360px; text-align:left}
+
     .big-loader{width:38px;height:38px;border:4px solid #fff;border-bottom-color:transparent;border-radius:50%;display:inline-block;animation:rotation 1s linear infinite}
     @keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
     .actions{display:flex; gap:12px; justify-content:center; margin-top:12px; flex-wrap:wrap}
     .btn.icon{width:56px;height:56px; border-radius:999px}
-    .drive-link{margin-top:8px; color:#fff; text-decoration:underline; word-break:break-all}
   </style>
 </head>
 <body>
@@ -130,21 +118,25 @@
         <canvas id="canvas"></canvas>
         <img id="imgPrev" alt="previsualización" />
         <div class="countdown" id="countOverlay"><div class="num" id="countNum">3</div></div>
-        <button type="button" class="remove-btn" id="btnRemove">×</button>
+        <!-- Tache para eliminar la foto capturada/subida -->
+        <button type="button" class="remove-btn" id="btnRemove" title="Eliminar">×</button>
       </div>
 
       <div class="controls">
-        <button class="btn" id="btnCamera" title="Activar/Detener cámara">
+        <button class="btn square" id="btnCamera" title="Activar/Detener cámara" aria-label="Cámara">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
         </button>
-        <button class="btn" id="btnShot" title="Tomar foto">
+        <button class="btn square" id="btnShot" title="Tomar foto" aria-label="Disparo">
           <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" stroke="currentColor" stroke-width="4" fill="none"/><circle cx="50" cy="50" r="30" fill="currentColor"/></svg>
         </button>
-        <label class="btn" for="fileInput" title="Subir imagen">
+        <label class="btn square" for="fileInput" title="Subir imagen" aria-label="Subir">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         </label>
         <input id="fileInput" type="file" accept="image/*" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
       </div>
+
+      <!-- Enviar manual -->
+      <button class="btn primary" id="btnSend" title="Enviar para generar">Enviar</button>
 
       <div id="msg" class="alert"></div>
     </div>
@@ -159,8 +151,11 @@
     </div>
     <div id="panel-result" class="panel" style="display:none;">
       <h2>¡Listo! 🎉</h2>
-      <img id="outFoto" alt="Foto generada" />
-      <a id="driveLink" class="drive-link" href="#" target="_blank" style="display:none">Ver en Drive</a>
+      <img id="outFoto" class="photo" alt="Foto generada" />
+      <div class="qr-wrap" id="qrWrap" style="display:none">
+        <img id="qrImg" alt="QR" />
+        <a id="driveLink" class="drive-link" href="#" target="_blank" rel="noopener">Abrir/descargar en Drive</a>
+      </div>
       <div class="actions">
         <button id="btnPrint" class="btn icon" title="Imprimir">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
@@ -173,9 +168,9 @@
   </div>
 
 <script>
-  /* Tu Apps Script (para subir a Drive/Sheets) */
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbwCzUEVAR7wqbaK-LJVXTgxOvxTsnmJhAaVi2JMLEU1s0PdqKHraDTE_cdglUyCK1mFdQ/exec";
-  /* Tu flujo n8n (genera la foto a partir de la captura) */
+  /* Apps Script que guarda en Drive/Sheets y devuelve { ok, driveLink, imagePublicUrl } */
+  const GAS_URL  = "https://script.google.com/macros/s/AKfycbwCzUEVAR7wqbaK-LJVXTgxOvxTsnmJhAaVi2JMLEU1s0PdqKHraDTE_cdglUyCK1mFdQ/exec";
+  /* Webhook de n8n que recibe la captura y regresa { foto: <dataURL> } */
   const N8N_WEBHOOK = "http://localhost:5678/webhook/fmf-intake";
 
   const video=document.getElementById('video');
@@ -185,14 +180,19 @@
   const btnShot=document.getElementById('btnShot');
   const fileInput=document.getElementById('fileInput');
   const btnRemove=document.getElementById('btnRemove');
+  const btnSend=document.getElementById('btnSend');
   const msg=document.getElementById('msg');
+
   const overlay=document.getElementById('overlay');
   const panelWait=document.getElementById('panel-wait');
   const panelResult=document.getElementById('panel-result');
   const outFoto=document.getElementById('outFoto');
+  const qrWrap=document.getElementById('qrWrap');
+  const qrImg=document.getElementById('qrImg');
   const driveLink=document.getElementById('driveLink');
   const btnPrint=document.getElementById('btnPrint');
   const btnFinish=document.getElementById('btnFinish');
+
   const countOverlay=document.getElementById('countOverlay');
   const countNum=document.getElementById('countNum');
 
@@ -206,15 +206,14 @@
       stream=await navigator.mediaDevices.getUserMedia({ video:{ facingMode:{ideal:'user'} }, audio:false });
       video.srcObject=stream; await video.play();
       video.classList.add('show'); imgPrev.classList.remove('show'); canvas.classList.remove('show');
+      btnRemove.classList.remove('show');
     }catch(err){ setAlert('err',"No se pudo acceder a la cámara: "+err.message); }
   }
   function stopCamera(){ if(stream){stream.getTracks().forEach(t=>t.stop());} stream=null; video.pause(); video.srcObject=null; video.classList.remove('show'); }
-
   btnCamera.onclick=()=>{ stream?stopCamera():startCamera(); };
 
   btnShot.onclick=()=>{ 
     if(!stream){ setAlert('err',"Primero activa la cámara."); return; } 
-    // contador
     let c=3; countNum.textContent=c; countOverlay.classList.add('show');
     const id=setInterval(()=>{ c--; if(c<=0){ clearInterval(id); countOverlay.classList.remove('show'); captureFrame(); } else { countNum.textContent=c; } },1000);
   };
@@ -224,72 +223,71 @@
     if(!w||!h){ setAlert('err',"No hay imagen de la cámara."); return; }
     canvas.width=w; canvas.height=h; canvas.getContext('2d').drawImage(video,0,0,w,h);
     currentDataURL=canvas.toDataURL('image/jpeg',0.92);
-    canvas.classList.add('show'); imgPrev.classList.remove('show'); btnRemove.style.display='flex';
-    stopCamera(); fetch(currentDataURL).then(r=>r.blob()).then(b=>currentBlob=b);
-    sendToN8N();
+    canvas.classList.add('show'); imgPrev.classList.remove('show'); btnRemove.classList.add('show');
+    stopCamera();
   }
 
   fileInput.onchange=(e)=>{
     const f=e.target.files?.[0]; if(!f) return;
-    const url=URL.createObjectURL(f); imgPrev.src=url; imgPrev.classList.add('show');
-    currentBlob=f;
-    const fr=new FileReader(); fr.onload=()=>{ currentDataURL=fr.result; sendToN8N(); }; fr.readAsDataURL(f);
+    const url=URL.createObjectURL(f); imgPrev.src=url; imgPrev.onload=()=>URL.revokeObjectURL(url);
+    imgPrev.classList.add('show'); canvas.classList.remove('show'); video.classList.remove('show'); btnRemove.classList.add('show'); clearAlert();
+    const fr=new FileReader(); fr.onload=()=>{ currentDataURL=fr.result; currentBlob=f; }; fr.readAsDataURL(f);
     stopCamera();
   };
 
-  btnRemove.onclick=()=>{ imgPrev.removeAttribute('src'); imgPrev.classList.remove('show'); canvas.classList.remove('show'); btnRemove.style.display='none'; currentDataURL=""; currentBlob=null; };
+  // Tache: limpiar foto seleccionada
+  btnRemove.onclick=()=>{ imgPrev.removeAttribute('src'); imgPrev.classList.remove('show'); canvas.classList.remove('show'); btnRemove.classList.remove('show'); currentDataURL=""; currentBlob=null; };
 
-  /* 1) Enviar la captura a n8n para generar la foto final
-     2) Con la foto final (dataURL), subirla a tu GAS_URL para guardarla en Drive/Sheets */
-  async function sendToN8N(){
+  // Enviar MANUALMENTE (no automático)
+  btnSend.onclick=async ()=>{
+    clearAlert();
+    if(!currentDataURL){ setAlert('err','Toma o sube una foto primero.'); return; }
+
     overlay.classList.add('show'); panelWait.style.display='block'; panelResult.style.display='none';
-    driveLink.style.display='none'; driveLink.removeAttribute('href');
+    qrWrap.style.display='none'; driveLink.removeAttribute('href');
 
     try{
-      // 1) n8n
+      // 1) n8n: genera la imagen final
       const fd=new FormData();
-      if(currentBlob){
-        const ext=(currentBlob.type?.split('/')[1])||'jpg';
-        fd.append('image',currentBlob,`captura.${ext}`);
-      } else {
-        fd.append('image_base64',currentDataURL);
-      }
+      if(currentBlob){ const ext=(currentBlob.type?.split('/')[1])||'jpg'; fd.append('image',currentBlob,`captura.${ext}`);}
+      else{ fd.append('image_base64',currentDataURL); }
       const res=await fetch(N8N_WEBHOOK,{method:'POST',body:fd});
       const json=await res.json();
-      if(!json||!json.foto) throw new Error("Respuesta inválida de n8n");
-
+      if(!json || !json.foto) throw new Error('Respuesta inválida de n8n');
       outFoto.src=json.foto;
 
-      // 2) Subir a GAS (Drive + Sheets)
-      const saved = await uploadToGAS(json.foto); // <- dataURL
+      // 2) Guardar en Drive/Sheets vía GAS
+      const saved = await uploadToGAS(json.foto);
       if(saved?.driveLink){
         driveLink.href = saved.driveLink;
-        driveLink.style.display = 'block';
+        // QR con Google Chart (simple y sin libs)
+        const qrURL = 'https://chart.googleapis.com/chart?chs=150x150&cht=qr&choe=UTF-8&chl=' + encodeURIComponent(saved.driveLink);
+        qrImg.src = qrURL;
+        qrWrap.style.display = 'flex';
       }
 
       panelWait.style.display='none'; panelResult.style.display='flex';
     }catch(err){
-      setAlert('err',err.message || 'Error en el proceso');
+      setAlert('err', err.message || 'Error en el proceso');
       overlay.classList.remove('show');
     }
-  }
+  };
 
   async function uploadToGAS(dataURL){
     try{
-      const fd = new FormData();
+      const fd=new FormData();
       fd.append('image_base64', dataURL);
       const res = await fetch(GAS_URL, { method:'POST', body:fd, mode:'cors' });
-      const j   = await res.json().catch(()=>null);
-      if(!j || !j.ok) throw new Error(j?.error || 'Error al guardar en Drive');
-      return j; // { ok, driveLink, imagePublicUrl, ... }
-    }catch(e){
-      // Si falla el guardado, seguimos mostrando la imagen al usuario
-      console.warn('Fallo al subir a GAS:', e);
-      return null;
-    }
+      const text = await res.text();
+      let j = null; try{ j = JSON.parse(text); }catch(_){}
+      if(!res.ok) throw new Error(`HTTP ${res.status} – ${text||'sin cuerpo'}`);
+      if(!j){ j = { ok:true, raw:text }; }
+      return j;
+    }catch(e){ console.warn('Fallo al subir a GAS:', e); return null; }
   }
 
-  btnPrint.onclick=()=>{
+  // Imprimir sin abrir pestaña adicional
+  btnPrint.onclick=()=>{ 
     const iframe=document.createElement('iframe');
     iframe.style.position='fixed';iframe.style.width='0';iframe.style.height='0';iframe.style.border='0';
     document.body.appendChild(iframe);
@@ -302,7 +300,14 @@
     setTimeout(()=>document.body.removeChild(iframe),1000);
   };
 
-  btnFinish.onclick=()=>{ overlay.classList.remove('show'); outFoto.src=""; clearAlert(); };
+  // Palomita: limpiar todo
+  btnFinish.onclick=()=>{ 
+    overlay.classList.remove('show');
+    outFoto.src=""; qrImg.removeAttribute('src'); qrWrap.style.display='none';
+    driveLink.removeAttribute('href');
+    btnRemove.click(); // limpia la captura/archivo
+    clearAlert();
+  };
 </script>
 </body>
 </html>
