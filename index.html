@@ -96,19 +96,7 @@
       box-shadow:0 10px 30px rgba(0,0,0,.35);
       display:flex; flex-direction:column; align-items:center;
     }
-
-    /* Foto resultado + QR sobrepuesto */
-    .photo-wrap{position:relative; display:inline-block; width:100%}
-    .photo{max-width:100%; border-radius:14px; display:block}
-    .qr-overlay{
-      position:absolute; right:10px; bottom:10px;
-      width:82px; height:82px; padding:6px;
-      background:#fff; border-radius:12px;
-      display:none; /* se muestra cuando hay link */
-      box-shadow:0 8px 22px rgba(0,0,0,.35);
-    }
-    .qr-overlay img{width:100%; height:100%; display:block}
-
+    .panel img{max-width:100%; border-radius:14px; margin:10px 0}
     .big-loader{width:38px;height:38px;border:4px solid #fff;border-bottom-color:transparent;border-radius:50%;display:inline-block;animation:rotation 1s linear infinite}
     @keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
     .actions{display:flex; gap:12px; justify-content:center; margin-top:12px; flex-wrap:wrap}
@@ -158,15 +146,7 @@
     </div>
     <div id="panel-result" class="panel" style="display:none;">
       <h2>¡Listo! 🎉</h2>
-
-      <!-- Foto con QR sobrepuesto -->
-      <div class="photo-wrap">
-        <img id="outFoto" class="photo" alt="Foto generada" />
-        <a id="qrAnchor" class="qr-overlay" href="#" target="_blank" rel="noopener">
-          <img id="qrImg" alt="QR" />
-        </a>
-      </div>
-
+      <img id="outFoto" alt="Foto generada" />
       <div class="actions">
         <button id="btnPrint" class="btn icon" title="Imprimir">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
@@ -196,8 +176,6 @@
   const panelWait=document.getElementById('panel-wait');
   const panelResult=document.getElementById('panel-result');
   const outFoto=document.getElementById('outFoto');
-  const qrAnchor=document.getElementById('qrAnchor');
-  const qrImg=document.getElementById('qrImg');
   const btnPrint=document.getElementById('btnPrint');
   const btnFinish=document.getElementById('btnFinish');
 
@@ -250,7 +228,6 @@
     if(!currentDataURL){ setAlert('err','Toma o sube una foto primero.'); return; }
 
     overlay.classList.add('show'); panelWait.style.display='block'; panelResult.style.display='none';
-    qrAnchor.style.display='none'; qrAnchor.removeAttribute('href'); qrImg.removeAttribute('src');
 
     try{
       // 1) n8n
@@ -263,14 +240,7 @@
       outFoto.src=json.foto;
 
       // 2) Guardar en Drive/Sheets
-      const saved = await uploadToGAS(json.foto);
-      if(saved?.driveLink){
-        const link = saved.driveLink;
-        qrAnchor.href = link;
-        const qrURL = 'https://chart.googleapis.com/chart?chs=160x160&cht=qr&choe=UTF-8&chl=' + encodeURIComponent(link);
-        qrImg.src = qrURL;
-        qrAnchor.style.display = 'block';
-      }
+      await uploadToGAS(json.foto);
 
       panelWait.style.display='none'; panelResult.style.display='flex';
     }catch(err){
@@ -307,7 +277,7 @@
 
   btnFinish.onclick=()=>{ 
     overlay.classList.remove('show');
-    outFoto.src=""; qrImg.removeAttribute('src'); qrAnchor.style.display='none'; qrAnchor.removeAttribute('href');
+    outFoto.src="";
     btnRemove.click(); // limpia la captura/archivo
     clearAlert();
   };
