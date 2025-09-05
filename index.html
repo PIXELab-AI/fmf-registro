@@ -55,7 +55,6 @@
     }
     .remove-btn.show{display:flex}
 
-    /* Contador */
     .countdown{
       position:absolute; inset:0; display:none;
       align-items:center; justify-content:center;
@@ -85,7 +84,6 @@
     .alert.ok{display:block; background:var(--success); border-color:var(--success)}
     .alert.err{display:block; background:rgba(239,68,68,.09); border-color:rgba(255,255,255,.25); color:#fecaca}
 
-    /* Overlay */
     .overlay{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.55); backdrop-filter:blur(3px); z-index:9999}
     .overlay.show{display:flex}
     .panel{
@@ -135,7 +133,6 @@
     </div>
   </div>
 
-  <!-- Overlay -->
   <div id="overlay" class="overlay">
     <div id="panel-wait" class="panel">
       <h2>Generando tu foto…</h2>
@@ -157,7 +154,6 @@
   </div>
 
 <script>
-  /* Webhook n8n: no cambies esto si ya lo tienes así en tu flujo */
   const N8N_WEBHOOK = "http://localhost:5678/webhook/fmf-intake";
 
   const video=document.getElementById('video');
@@ -221,15 +217,15 @@
 
   btnRemove.onclick=()=>{ imgPrev.removeAttribute('src'); imgPrev.classList.remove('show'); canvas.classList.remove('show'); btnRemove.classList.remove('show'); currentDataURL=""; };
 
-  // Utilidad: convierte un dataURL a File (para multipart/form-data)
+  // Convierte dataURL -> File para multipart/form-data
   function dataURLtoFile(dataurl, filename) {
     const arr = dataurl.split(',');
     const mime = (arr[0].match(/:(.*?);/)||[])[1] || 'image/jpeg';
     const bstr = atob(arr[1]);
     let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) u8arr[n] = bstr.charCodeAt(n);
-    return new File([u8arr], filename, { type: mime });
+    const u8 = new Uint8Array(n);
+    while (n--) u8[n] = bstr.charCodeAt(n);
+    return new File([u8], filename, { type: mime });
   }
 
   btnSend.onclick=async ()=> {
@@ -240,18 +236,31 @@
 
     try{
       const fd=new FormData();
-
-      // 🔑 Convertimos el base64 a archivo y lo mandamos como "image" (lo que espera n8n)
       const file = dataURLtoFile(currentDataURL, 'captura.jpg');
-      fd.append('image', file); // <-- nombre de campo que lee tu HTTP Request
+      fd.append('image', file); // nombre de campo que espera n8n
 
-      const res=await fetch(N8N_WEBHOOK,{method:'POST',body:fd});
-      const json=await res.json();
-      if(!json || !json.foto) throw new Error('Respuesta inválida de n8n');
+      const res = await fetch(N8N_WEBHOOK,{ method:'POST', body: fd });
 
-      outFoto.src=json.foto;
+      // Manejo robusto de respuesta (por si no es JSON)
+      const ct = res.headers.get('content-type') || '';
+      let payload = null;
+      if (ct.includes('application/json')) {
+        payload = await res.json();
+      } else {
+        const text = await res.text(); // puede venir vacío (204)
+        try { payload = JSON.parse(text); } catch { payload = { raw: text || null }; }
+      }
 
-      panelWait.style.display='none'; panelResult.style.display='flex';
+      if (payload && payload.foto) {
+        outFoto.src = payload.foto;
+        panelWait.style.display='none';
+        panelResult.style.display='flex';
+      } else {
+        panelWait.style.display='none';
+        overlay.classList.remove('show');
+        setAlert('ok', `Imagen enviada (${res.status}). El flujo no devolvió "foto" en JSON.`);
+        console.log('[debug] Respuesta webhook:', payload);
+      }
     }catch(err){
       setAlert('err', err.message || 'Error en el proceso');
       overlay.classList.remove('show');
