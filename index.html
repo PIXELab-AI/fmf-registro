@@ -130,9 +130,7 @@
         <input id="fileInput" type="file" accept="image/*" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
       </div>
 
-      <!-- Enviar manual -->
       <button class="btn primary" id="btnSend" title="Enviar para generar">Enviar</button>
-
       <div id="msg" class="alert"></div>
     </div>
   </div>
@@ -159,6 +157,7 @@
   </div>
 
 <script>
+  /* Webhook n8n: no cambies esto si ya lo tienes así en tu flujo */
   const N8N_WEBHOOK = "http://localhost:5678/webhook/fmf-intake";
 
   const video=document.getElementById('video');
@@ -222,6 +221,17 @@
 
   btnRemove.onclick=()=>{ imgPrev.removeAttribute('src'); imgPrev.classList.remove('show'); canvas.classList.remove('show'); btnRemove.classList.remove('show'); currentDataURL=""; };
 
+  // Utilidad: convierte un dataURL a File (para multipart/form-data)
+  function dataURLtoFile(dataurl, filename) {
+    const arr = dataurl.split(',');
+    const mime = (arr[0].match(/:(.*?);/)||[])[1] || 'image/jpeg';
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) u8arr[n] = bstr.charCodeAt(n);
+    return new File([u8arr], filename, { type: mime });
+  }
+
   btnSend.onclick=async ()=> {
     clearAlert();
     if(!currentDataURL){ setAlert('err','Toma o sube una foto primero.'); return; }
@@ -230,8 +240,10 @@
 
     try{
       const fd=new FormData();
-      // ✅ siempre enviamos como base64
-      fd.append('image_base64', currentDataURL);
+
+      // 🔑 Convertimos el base64 a archivo y lo mandamos como "image" (lo que espera n8n)
+      const file = dataURLtoFile(currentDataURL, 'captura.jpg');
+      fd.append('image', file); // <-- nombre de campo que lee tu HTTP Request
 
       const res=await fetch(N8N_WEBHOOK,{method:'POST',body:fd});
       const json=await res.json();
