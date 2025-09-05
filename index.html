@@ -159,7 +159,6 @@
   </div>
 
 <script>
-  /* Solo n8n */
   const N8N_WEBHOOK = "http://localhost:5678/webhook/fmf-intake";
 
   const video=document.getElementById('video');
@@ -182,7 +181,7 @@
   const countOverlay=document.getElementById('countOverlay');
   const countNum=document.getElementById('countNum');
 
-  let stream=null, currentDataURL="", currentBlob=null;
+  let stream=null, currentDataURL="";
 
   function setAlert(type,text){ msg.className="alert "+(type==='err'?'err':'ok'); msg.textContent=text; msg.style.display="block"; }
   function clearAlert(){ msg.className="alert"; msg.textContent=""; msg.style.display="none"; }
@@ -217,13 +216,13 @@
     const f=e.target.files?.[0]; if(!f) return;
     const url=URL.createObjectURL(f); imgPrev.src=url; imgPrev.onload=()=>URL.revokeObjectURL(url);
     imgPrev.classList.add('show'); canvas.classList.remove('show'); video.classList.remove('show'); btnRemove.classList.add('show'); clearAlert();
-    const fr=new FileReader(); fr.onload=()=>{ currentDataURL=fr.result; currentBlob=f; }; fr.readAsDataURL(f);
+    const fr=new FileReader(); fr.onload=()=>{ currentDataURL=fr.result; }; fr.readAsDataURL(f);
     stopCamera();
   };
 
-  btnRemove.onclick=()=>{ imgPrev.removeAttribute('src'); imgPrev.classList.remove('show'); canvas.classList.remove('show'); btnRemove.classList.remove('show'); currentDataURL=""; currentBlob=null; };
+  btnRemove.onclick=()=>{ imgPrev.removeAttribute('src'); imgPrev.classList.remove('show'); canvas.classList.remove('show'); btnRemove.classList.remove('show'); currentDataURL=""; };
 
-  btnSend.onclick=async ()=>{
+  btnSend.onclick=async ()=> {
     clearAlert();
     if(!currentDataURL){ setAlert('err','Toma o sube una foto primero.'); return; }
 
@@ -231,8 +230,8 @@
 
     try{
       const fd=new FormData();
-      if(currentBlob){ const ext=(currentBlob.type?.split('/')[1])||'jpg'; fd.append('image',currentBlob,`captura.${ext}`);}
-      else{ fd.append('image_base64',currentDataURL); }
+      // ✅ siempre enviamos como base64
+      fd.append('image_base64', currentDataURL);
 
       const res=await fetch(N8N_WEBHOOK,{method:'POST',body:fd});
       const json=await res.json();
@@ -263,7 +262,7 @@
   btnFinish.onclick=()=>{ 
     overlay.classList.remove('show');
     outFoto.src="";
-    btnRemove.click(); // limpia la captura/archivo
+    btnRemove.click();
     clearAlert();
   };
 </script>
